@@ -1,5 +1,6 @@
 package com.danicode.gui.model;
 
+import java.awt.LayoutManager;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -19,8 +20,9 @@ public abstract class GUIWindow extends JFrame {
      * @param height alto
      * @param title título
      * @param resizable tamaño ajustable
+     * @param layout layout por defecto
      */
-    public GUIWindow(int width, int height, String title, boolean resizable) {
+    public GUIWindow(int width, int height, String title, boolean resizable, LayoutManager layout) {
         super(title);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
@@ -30,6 +32,7 @@ public abstract class GUIWindow extends JFrame {
             @Override
             public void windowClosing(WindowEvent ev) { GUIWindow.this.close(); }
         });
+        this.getContentPane().setLayout(layout);
         this.init();
         this.setVisible(true);
     }
