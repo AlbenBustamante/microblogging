@@ -11,4 +11,6 @@ public interface CRUD<E> {
     int update(E element) throws Exception;
 
     int delete(int idElement) throws Exception;
+
+    E getById(int idElement) throws Exception;
 }

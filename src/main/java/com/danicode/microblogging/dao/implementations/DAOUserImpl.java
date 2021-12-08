@@ -32,4 +32,9 @@ public class DAOUserImpl implements DAOUser {
     public int delete(int idElement) throws Exception {
         return 0;
     }
+
+    @Override
+    public User getById(int idElement) throws Exception {
+        return null;
+    }
 }
