@@ -80,7 +80,13 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public int delete(int idUser) throws Exception {
-        return 0;
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var pstmt = conn.prepareStatement(SQL_DELETE);
+        pstmt.setInt(1, idUser);
+        var rowsUpdated = pstmt.executeUpdate();
+        close(this.externConnection, conn, pstmt);
+
+        return rowsUpdated;
     }
 
     @Override
