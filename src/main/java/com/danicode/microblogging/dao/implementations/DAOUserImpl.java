@@ -5,6 +5,7 @@ import com.danicode.microblogging.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.danicode.microblogging.dao.ConnectionService.*;
@@ -42,7 +43,22 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public List<User> list() throws Exception {
-        return null;
+        List<User> users = new ArrayList<>();
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var pstmt = conn.prepareStatement(SQL_SELECT);
+        var rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            var user = new User(
+                    rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
+                    rs.getString("email"), rs.getString("username"), rs.getString("password")
+            );
+            users.add(user);
+        }
+
+        close(this.externConnection, conn, pstmt, rs);
+
+        return users;
     }
 
     @Override
