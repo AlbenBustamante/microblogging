@@ -2,3 +2,5 @@ target
 .idea
 windows.iml
 out
+test
+structure
