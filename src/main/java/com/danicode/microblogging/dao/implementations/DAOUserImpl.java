@@ -17,7 +17,7 @@ public class DAOUserImpl implements DAOUser {
         SQL_SELECT = "SELECT * FROM users;",
         SQL_UPDATE = "UPDATE users SET name=?, last_name=?, email=?, username=?, password=? WHERE user_id=?;",
         SQL_DELETE = "DELETE FROM users WHERE user_id=?;",
-        SQL_SELECT_BY_ID = "SELECT name, last_name, email, username, password FROM users WHERE user_id=?;";
+        SQL_SELECT_BY_ID = "SELECT * FROM users WHERE user_id=?;";
 
     public DAOUserImpl() { }
 
@@ -91,6 +91,18 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public User getById(int idUser) throws Exception {
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var pstmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+        pstmt.setInt(1, idUser);
+        var rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            return new User(
+                    rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
+                    rs.getString("email"), rs.getString("username"), rs.getString("password")
+            );
+        }
+
         return null;
     }
 }
