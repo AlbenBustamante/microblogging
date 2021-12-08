@@ -63,7 +63,19 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public int update(User user) throws Exception {
-        return 0;
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var pstmt = conn.prepareStatement(SQL_UPDATE);
+        pstmt.setString(1, user.getName());
+        pstmt.setString(2, user.getLastName());
+        pstmt.setString(3, user.getEmail());
+        pstmt.setString(4, user.getUsername());
+        pstmt.setString(5, user.getPassword());
+        pstmt.setInt(6, user.getIdUser());
+
+        var rowsUpdated = pstmt.executeUpdate();
+        close(this.externConnection, conn, pstmt);
+
+        return rowsUpdated;
     }
 
     @Override
