@@ -18,7 +18,8 @@ public class DAOUserImpl implements DAOUser {
         SQL_UPDATE = "UPDATE users SET name=?, last_name=?, email=?, username=?, password=? WHERE user_id=?;",
         SQL_DELETE = "DELETE FROM users WHERE user_id=?;",
         SQL_SELECT_BY_ID = "SELECT * FROM users WHERE user_id=?;",
-        SQL_SELECT_BY_USERNAME = "SELECT * FROM users WHERE UPPER(username)=UPPER(?)";
+        SQL_SELECT_BY_USERNAME = "SELECT * FROM users WHERE UPPER(username)=UPPER(?);",
+        SQL_SELECT_BY_EMAIL = "SELECT * FROM users WHERE email=?;";
 
     public DAOUserImpl() { }
 
@@ -118,5 +119,23 @@ public class DAOUserImpl implements DAOUser {
                     rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
                     rs.getString("email"), rs.getString("username"), rs.getString("password"))
                 : null;
+    }
+
+    @Override
+    public User findByEmail(String email) throws Exception {
+        User user = null;
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var pstmt = conn.prepareStatement(SQL_SELECT_BY_EMAIL);
+        pstmt.setString(1, email);
+        var rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            user = new User(
+                    rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
+                    rs.getString("email"), rs.getString("username"), rs.getString("password")
+            );
+        }
+        close(this.externConnection, conn, pstmt, rs);
+        return user;
     }
 }
