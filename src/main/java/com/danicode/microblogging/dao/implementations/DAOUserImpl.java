@@ -110,23 +110,19 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public User findByUsername(String username) throws Exception {
-        var conn = this.externConnection != null ? this.externConnection : getConnection();
-        var pstmt = conn.prepareStatement(SQL_SELECT_BY_USERNAME);
-        pstmt.setString(1, username);
-        var rs = pstmt.executeQuery();
-
-        return rs.next() ? new User(
-                    rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
-                    rs.getString("email"), rs.getString("username"), rs.getString("password"))
-                : null;
+        return this.findByString(SQL_SELECT_BY_USERNAME, username);
     }
 
     @Override
     public User findByEmail(String email) throws Exception {
+        return this.findByString(SQL_SELECT_BY_EMAIL, email);
+    }
+
+    private User findByString(String query, String value) throws Exception {
         User user = null;
         var conn = this.externConnection == null ? getConnection() : this.externConnection;
-        var pstmt = conn.prepareStatement(SQL_SELECT_BY_EMAIL);
-        pstmt.setString(1, email);
+        var pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, value);
         var rs = pstmt.executeQuery();
 
         if (rs.next()) {
