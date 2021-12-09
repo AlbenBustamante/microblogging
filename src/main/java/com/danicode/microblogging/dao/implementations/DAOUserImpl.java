@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.danicode.microblogging.dao.ConnectionService.*;
+import static com.danicode.microblogging.dao.service.ConnectionService.*;
 
 public class DAOUserImpl implements DAOUser {
     private Connection externConnection = null;
