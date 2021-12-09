@@ -12,5 +12,5 @@ public interface CRUD<E> {
 
     int delete(int idElement) throws Exception;
 
-    E getById(int idElement) throws Exception;
+    E findById(int idElement) throws Exception;
 }

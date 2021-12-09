@@ -90,7 +90,7 @@ public class DAOUserImpl implements DAOUser {
     }
 
     @Override
-    public User getById(int idUser) throws Exception {
+    public User findById(int idUser) throws Exception {
         var conn = this.externConnection == null ? getConnection() : this.externConnection;
         var pstmt = conn.prepareStatement(SQL_SELECT_BY_ID);
         pstmt.setInt(1, idUser);
