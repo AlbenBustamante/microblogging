@@ -93,19 +93,20 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public User findById(int idUser) throws Exception {
+        User user = null;
         var conn = this.externConnection == null ? getConnection() : this.externConnection;
         var pstmt = conn.prepareStatement(SQL_SELECT_BY_ID);
         pstmt.setInt(1, idUser);
         var rs = pstmt.executeQuery();
 
         if (rs.next()) {
-            return new User(
+            user = new User(
                     rs.getInt("user_id"), rs.getString("name"), rs.getString("last_name"),
                     rs.getString("email"), rs.getString("username"), rs.getString("password")
             );
         }
-
-        return null;
+        close(this.externConnection, conn, pstmt, rs);
+        return user;
     }
 
     @Override
