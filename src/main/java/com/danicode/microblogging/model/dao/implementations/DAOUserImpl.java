@@ -2,7 +2,7 @@ package com.danicode.microblogging.model.dao.implementations;
 
 import com.danicode.microblogging.services.ConnectionService;
 import com.danicode.microblogging.model.dao.templates.DAOUser;
-import com.danicode.microblogging.domain.User;
+import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
