@@ -1,4 +1,4 @@
-package com.danicode.microblogging.gui.layouts;
+package com.danicode.microblogging.gui.model.layouts;
 
 import java.awt.GridBagConstraints;
 import java.awt.Component;
