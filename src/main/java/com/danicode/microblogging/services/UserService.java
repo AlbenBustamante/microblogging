@@ -9,8 +9,8 @@ import java.sql.Connection;
 import static com.danicode.microblogging.services.ConnectionService.getConnection;
 
 public class UserService {
-    Connection conn;
-    DAOUser userDao;
+    private Connection conn;
+    private DAOUser userDao;
     private static User userLogged = null;
 
     public boolean isUserRegistered(User user) {
