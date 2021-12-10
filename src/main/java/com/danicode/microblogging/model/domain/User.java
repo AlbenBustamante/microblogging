@@ -1,4 +1,4 @@
-package com.danicode.microblogging.domain;
+package com.danicode.microblogging.model.domain;
 
 import java.util.Objects;
 

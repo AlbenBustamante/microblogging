@@ -1,4 +1,4 @@
-package com.danicode.microblogging.dao.service;
+package com.danicode.microblogging.services;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 

@@ -1,14 +1,13 @@
-package com.danicode.microblogging.dao.implementations;
+package com.danicode.microblogging.model.dao.implementations;
 
-import com.danicode.microblogging.dao.templates.DAOUser;
+import com.danicode.microblogging.services.ConnectionService;
+import com.danicode.microblogging.model.dao.templates.DAOUser;
 import com.danicode.microblogging.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.danicode.microblogging.dao.service.ConnectionService.*;
 
 public class DAOUserImpl implements DAOUser {
     private Connection externConnection = null;
@@ -29,7 +28,7 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public int create(User user) throws Exception {
-        Connection conn = this.externConnection == null ? getConnection() : this.externConnection;
+        Connection conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
         PreparedStatement pstmt = conn.prepareStatement(SQL_INSERT);
         pstmt.setString(1, user.getName());
         pstmt.setString(2, user.getLastName());
@@ -38,7 +37,7 @@ public class DAOUserImpl implements DAOUser {
         pstmt.setString(5, user.getPassword());
 
         var rowsUpdated = pstmt.executeUpdate();
-        close(this.externConnection, conn, pstmt);
+        ConnectionService.close(this.externConnection, conn, pstmt);
 
         return rowsUpdated;
     }
@@ -46,7 +45,7 @@ public class DAOUserImpl implements DAOUser {
     @Override
     public List<User> list() throws Exception {
         List<User> users = new ArrayList<>();
-        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var conn = this.externConnection != null ? this.externConnection : ConnectionService.getConnection();
         var pstmt = conn.prepareStatement(SQL_SELECT);
         var rs = pstmt.executeQuery();
 
@@ -58,14 +57,14 @@ public class DAOUserImpl implements DAOUser {
             users.add(user);
         }
 
-        close(this.externConnection, conn, pstmt, rs);
+        ConnectionService.close(this.externConnection, conn, pstmt, rs);
 
         return users;
     }
 
     @Override
     public int update(User user) throws Exception {
-        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
         var pstmt = conn.prepareStatement(SQL_UPDATE);
         pstmt.setString(1, user.getName());
         pstmt.setString(2, user.getLastName());
@@ -75,18 +74,18 @@ public class DAOUserImpl implements DAOUser {
         pstmt.setInt(6, user.getIdUser());
 
         var rowsUpdated = pstmt.executeUpdate();
-        close(this.externConnection, conn, pstmt);
+        ConnectionService.close(this.externConnection, conn, pstmt);
 
         return rowsUpdated;
     }
 
     @Override
     public int delete(int idUser) throws Exception {
-        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var conn = this.externConnection != null ? this.externConnection : ConnectionService.getConnection();
         var pstmt = conn.prepareStatement(SQL_DELETE);
         pstmt.setInt(1, idUser);
         var rowsUpdated = pstmt.executeUpdate();
-        close(this.externConnection, conn, pstmt);
+        ConnectionService.close(this.externConnection, conn, pstmt);
 
         return rowsUpdated;
     }
@@ -94,7 +93,7 @@ public class DAOUserImpl implements DAOUser {
     @Override
     public User findById(int idUser) throws Exception {
         User user = null;
-        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
         var pstmt = conn.prepareStatement(SQL_SELECT_BY_ID);
         pstmt.setInt(1, idUser);
         var rs = pstmt.executeQuery();
@@ -105,7 +104,7 @@ public class DAOUserImpl implements DAOUser {
                     rs.getString("email"), rs.getString("username"), rs.getString("password")
             );
         }
-        close(this.externConnection, conn, pstmt, rs);
+        ConnectionService.close(this.externConnection, conn, pstmt, rs);
         return user;
     }
 
@@ -121,7 +120,7 @@ public class DAOUserImpl implements DAOUser {
 
     private User findByString(String query, String value) throws Exception {
         User user = null;
-        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
         var pstmt = conn.prepareStatement(query);
         pstmt.setString(1, value);
         var rs = pstmt.executeQuery();
@@ -132,7 +131,7 @@ public class DAOUserImpl implements DAOUser {
                     rs.getString("email"), rs.getString("username"), rs.getString("password")
             );
         }
-        close(this.externConnection, conn, pstmt, rs);
+        ConnectionService.close(this.externConnection, conn, pstmt, rs);
         return user;
     }
 }

@@ -1,4 +1,4 @@
-package com.danicode.microblogging.dao.templates;
+package com.danicode.microblogging.model.dao.templates;
 
 import java.util.List;
 
