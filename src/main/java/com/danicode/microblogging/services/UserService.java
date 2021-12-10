@@ -26,6 +26,13 @@ public class UserService {
             this.conn.close();
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
         }
         return isRegistered;
     }
