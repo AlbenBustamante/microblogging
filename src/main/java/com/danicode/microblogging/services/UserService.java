@@ -11,6 +11,7 @@ import static com.danicode.microblogging.services.ConnectionService.getConnectio
 public class UserService {
     Connection conn;
     DAOUser userDao;
+    private static User userLogged = null;
 
     public boolean isUserRegistered(User user) {
         boolean isRegistered = false;
@@ -62,4 +63,39 @@ public class UserService {
         }
         return register;
     }
+
+    public boolean setUserLogged(User userToLog) {
+        var logInProcess = false;
+        if (userLogged == null) {
+            try {
+                this.conn = getConnection();
+                this.conn.setAutoCommit(false);
+                this.userDao = new DAOUserImpl(this.conn);
+                var userByUsername = this.userDao.findByUsername(userToLog.getUsername());
+
+                if (userByUsername != null) {
+                    if (userToLog.getPassword().equals(userByUsername.getPassword())) {
+                        userLogged = userByUsername;
+                        logInProcess = true;
+                    }
+                }
+
+                this.conn.commit();
+                this.conn.close();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+                try {
+                    if (this.conn != null) {
+                        this.conn.rollback();
+                    }
+                } catch (Exception ex1) {
+                    ex1.printStackTrace(System.out);
+                }
+            }
+        }
+
+        return logInProcess;
+    }
+
+    public User getUserLogged() { return userLogged; }
 }
