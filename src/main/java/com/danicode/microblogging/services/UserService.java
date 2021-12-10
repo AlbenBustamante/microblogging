@@ -36,4 +36,30 @@ public class UserService {
         }
         return isRegistered;
     }
+
+    public boolean registerNewUser(User user) {
+        var register = false;
+        if (!this.isUserRegistered(user)) {
+            try {
+                this.conn = getConnection();
+                this.conn.setAutoCommit(false);
+                this.userDao = new DAOUserImpl(this.conn);
+
+                register = this.userDao.create(user) != 0;
+
+                this.conn.commit();
+                this.conn.close();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.out);
+                try {
+                    if (this.conn != null) {
+                        this.conn.rollback();
+                    }
+                } catch (Exception ex1) {
+                    ex1.printStackTrace(System.out);
+                }
+            }
+        }
+        return register;
+    }
 }
