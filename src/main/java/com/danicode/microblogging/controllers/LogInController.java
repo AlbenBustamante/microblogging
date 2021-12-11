@@ -58,6 +58,16 @@ public class LogInController {
         }
     }
 
+    private boolean isSignUpEmpty() {
+        var name = this.signUpTemplate.getJName().getText().strip();
+        var lastName = this.signUpTemplate.getJLastName().getText().strip();
+        var email = this.signUpTemplate.getJEmail().getText().strip();
+        var username = this.signUpTemplate.getJUsername().getText().strip();
+        var password = new String(this.signUpTemplate.getJPassword().getPassword()).strip();
+
+        return name.equals("") || lastName.equals("") || email.equals("") || username.equals("") || password.equals("");
+    }
+
     private void signUp() {
         JOptionPane.showMessageDialog(null, "REGISTRANDO...");
     }
