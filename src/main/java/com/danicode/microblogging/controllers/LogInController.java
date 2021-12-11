@@ -14,6 +14,7 @@ public class LogInController {
     private SignUpTemplate signUpTemplate;
     private UserService userService;
     private User user;
+    private String logUsername, logPassword, signName, signLastName, signEmail, signUsername, signPassword;
 
     public LogInController() {
         this.logIn = new GUILogIn();
@@ -24,18 +25,19 @@ public class LogInController {
         this.setActions();
     }
 
+    private void setLogInData() {
+        this.logUsername = this.logInTemplate.getJUser().getText().strip();
+        this.logPassword = new String(this.logInTemplate.getJPassword().getPassword()).strip();
+    }
+
     private boolean isLogInEmpty() {
-        var username = this.logInTemplate.getJUser().getText().trim();
-        var password = new String(this.logInTemplate.getJPassword().getPassword());
-        return username.equals("") || password.equals("");
+        this.setLogInData();
+
+        return this.logUsername.equals("") || this.logPassword.equals("");
     }
 
     private boolean setUserLogged() {
-        var username = this.logInTemplate.getJUser().getText().trim();
-        var password = new String(this.logInTemplate.getJPassword().getPassword());
-        this.user.setEmail(username);
-        this.user.setUsername(username);
-        this.user.setPassword(password);
+        this.user = new User("", "", this.logUsername, this.logUsername, this.logPassword);
 
         return this.userService.setUserLogged(this.user);
     }
@@ -58,24 +60,24 @@ public class LogInController {
         }
     }
 
-    private boolean isSignUpEmpty() {
-        var name = this.signUpTemplate.getJName().getText().strip();
-        var lastName = this.signUpTemplate.getJLastName().getText().strip();
-        var email = this.signUpTemplate.getJEmail().getText().strip();
-        var username = this.signUpTemplate.getJUsername().getText().strip();
-        var password = new String(this.signUpTemplate.getJPassword().getPassword()).strip();
+    private void setSignUpData() {
+        this.signName = this.signUpTemplate.getJName().getText().strip();
+        this.signLastName = this.signUpTemplate.getJLastName().getText().strip();
+        this.signEmail = this.signUpTemplate.getJEmail().getText().strip();
+        this.signUsername = this.signUpTemplate.getJUsername().getText().strip();
+        this.signPassword = new String(this.signUpTemplate.getJPassword().getPassword()).strip();
+    }
 
-        return name.equals("") || lastName.equals("") || email.equals("") || username.equals("") || password.equals("");
+    private boolean isSignUpEmpty() {
+        this.setSignUpData();
+
+        return this.signName.equals("") || this.signLastName.equals("") || this.signEmail.equals("") ||
+                this.signUsername.equals("") || this.signPassword.equals("");
     }
 
     private boolean newUserRegistered() {
-        var name = this.signUpTemplate.getJName().getText().strip();
-        var lastName = this.signUpTemplate.getJLastName().getText().strip();
-        var email = this.signUpTemplate.getJEmail().getText().strip();
-        var username = this.signUpTemplate.getJUsername().getText().strip();
-        var password = new String(this.signUpTemplate.getJPassword().getPassword()).strip();
+        this.user = new User(this.signName, this.signLastName, this.signEmail, this.signUsername, this.signPassword);
 
-        this.user = new User(name, lastName, email, username, password);
         return this.userService.registerNewUser(this.user);
     }
 
@@ -83,11 +85,11 @@ public class LogInController {
         if (!this.isSignUpEmpty()) {
             if (this.newUserRegistered()) {
                 JOptionPane.showMessageDialog(null, "¡Usuario registrado con éxito!",
-                        this.user.getUsername(), JOptionPane.INFORMATION_MESSAGE);
+                        "Nuevo usuario: " + this.user.getUsername(), JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null,
-                        "El usuario ya existe o algún dato está mal introducido", "Algo está mal",
-                        JOptionPane.ERROR_MESSAGE);
+                        "El nombre de usuario y/o correo electrónico ya se encuentra registrado.",
+                        "No fue posible registrar un nuevo usuario", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else {
@@ -106,11 +108,5 @@ public class LogInController {
         this.signUpTemplate.getJEmail().addActionListener(e -> this.signUp());
         this.signUpTemplate.getJUsername().addActionListener(e -> this.signUp());
         this.signUpTemplate.getJPassword().addActionListener(e -> this.signUp());
-    }
-}
-
-class test {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LogInController::new);
     }
 }
