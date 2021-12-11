@@ -108,4 +108,6 @@ public class UserService {
     }
 
     public User getUserLogged() { return userLogged; }
+
+    public void resetUserLogged() { userLogged = null; }
 }
