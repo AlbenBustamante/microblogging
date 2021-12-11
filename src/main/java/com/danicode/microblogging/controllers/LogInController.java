@@ -49,12 +49,12 @@ public class LogInController {
             }
             else {
                 JOptionPane.showMessageDialog(null, "Verifica los datos nuevamente",
-                        "Datos no coinciden", JOptionPane.INFORMATION_MESSAGE);
+                        "Datos no coinciden", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {
             JOptionPane.showMessageDialog(null, "Por favor, llena los datos para iniciar sesión",
-                    "Datos en blanco", JOptionPane.INFORMATION_MESSAGE);
+                    "Datos en blanco", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -68,8 +68,32 @@ public class LogInController {
         return name.equals("") || lastName.equals("") || email.equals("") || username.equals("") || password.equals("");
     }
 
+    private boolean newUserRegistered() {
+        var name = this.signUpTemplate.getJName().getText().strip();
+        var lastName = this.signUpTemplate.getJLastName().getText().strip();
+        var email = this.signUpTemplate.getJEmail().getText().strip();
+        var username = this.signUpTemplate.getJUsername().getText().strip();
+        var password = new String(this.signUpTemplate.getJPassword().getPassword()).strip();
+
+        this.user = new User(name, lastName, email, username, password);
+        return this.userService.registerNewUser(this.user);
+    }
+
     private void signUp() {
-        JOptionPane.showMessageDialog(null, "REGISTRANDO...");
+        if (!this.isSignUpEmpty()) {
+            if (this.newUserRegistered()) {
+                JOptionPane.showMessageDialog(null, "¡Usuario registrado con éxito!",
+                        this.user.getUsername(), JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "El usuario ya existe o algún dato está mal introducido", "Algo está mal",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Por favor, llena todos los campos para registrarte",
+                    "Datos en blanco", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void setActions() {
