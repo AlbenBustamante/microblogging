@@ -3,6 +3,7 @@ package com.danicode.microblogging.controllers;
 import com.danicode.microblogging.gui.login.GUILogIn;
 import com.danicode.microblogging.gui.login.LogInTemplate;
 import com.danicode.microblogging.gui.login.SignUpTemplate;
+import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.UserService;
 
 import javax.swing.*;
@@ -12,17 +13,47 @@ public class LogInController {
     private LogInTemplate logInTemplate;
     private SignUpTemplate signUpTemplate;
     private UserService userService;
+    private User user;
 
     public LogInController() {
         this.logIn = new GUILogIn();
         this.logInTemplate = this.logIn.getLogInTemplate();
         this.signUpTemplate = this.logIn.getSignUpTemplate();
         this.userService = new UserService();
+        this.user = new User();
         this.setActions();
     }
 
+    private boolean isLogInEmpty() {
+        var username = this.logInTemplate.getJUser().getText().trim();
+        var password = new String(this.logInTemplate.getJPassword().getPassword());
+        return username.equals("") || password.equals("");
+    }
+
+    private boolean setUserLogged() {
+        var username = this.logInTemplate.getJUser().getText().trim();
+        var password = new String(this.logInTemplate.getJPassword().getPassword());
+        this.user.setEmail(username);
+        this.user.setUsername(username);
+        this.user.setPassword(password);
+
+        return this.userService.setUserLogged(this.user);
+    }
+
     private void logIn() {
-        JOptionPane.showMessageDialog(null, "INICIANDO SESIÓN...");
+        if (!this.isLogInEmpty()) {
+            if (this.setUserLogged()) {
+                JOptionPane.showMessageDialog(null, this.userService.getUserLogged());
+            }
+            else {
+                JOptionPane.showMessageDialog(null,
+                        "Verifica los datos nuevamente", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,
+                    "Por favor, llena los datos para iniciar sesión", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void signUp() {
@@ -39,5 +70,11 @@ public class LogInController {
         this.signUpTemplate.getJEmail().addActionListener(e -> this.signUp());
         this.signUpTemplate.getJUsername().addActionListener(e -> this.signUp());
         this.signUpTemplate.getJPassword().addActionListener(e -> this.signUp());
+    }
+}
+
+class test {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(LogInController::new);
     }
 }
