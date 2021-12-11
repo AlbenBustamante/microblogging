@@ -43,16 +43,18 @@ public class LogInController {
     private void logIn() {
         if (!this.isLogInEmpty()) {
             if (this.setUserLogged()) {
-                JOptionPane.showMessageDialog(null, this.userService.getUserLogged());
+                JOptionPane.showMessageDialog(null,
+                        "¡Bienvenido " + this.userService.getUserLogged().getUsername() + "!",
+                        "Sesión abierta", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
-                JOptionPane.showMessageDialog(null,
-                        "Verifica los datos nuevamente", "Error", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Verifica los datos nuevamente",
+                        "Datos no coinciden", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else {
-            JOptionPane.showMessageDialog(null,
-                    "Por favor, llena los datos para iniciar sesión", "Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor, llena los datos para iniciar sesión",
+                    "Datos en blanco", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
