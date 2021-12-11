@@ -65,23 +65,26 @@ public class UserService {
     }
 
     public boolean setUserLogged(User userToLog) {
-        var logInProcess = false;
         if (userLogged == null) {
             try {
-                this.conn = getConnection();
-                this.conn.setAutoCommit(false);
-                this.userDao = new DAOUserImpl(this.conn);
-                var userByUsername = this.userDao.findByUsername(userToLog.getUsername());
+                if (this.isUserRegistered(userToLog)) {
+                    this.conn = getConnection();
+                    this.conn.setAutoCommit(false);
+                    this.userDao = new DAOUserImpl(this.conn);
 
-                if (userByUsername != null) {
-                    if (userToLog.getPassword().equals(userByUsername.getPassword())) {
-                        userLogged = userByUsername;
-                        logInProcess = true;
+                    var userByEmail = this.userDao.findByEmail(userToLog.getEmail());
+                    var userByUsername = this.userDao.findByUsername(userToLog.getUsername());
+
+                    if (this.isDataCorrect(userToLog, userByEmail)) {
+                        userLogged = userByEmail;
                     }
-                }
+                    else if (this.isDataCorrect(userToLog, userByUsername)) {
+                        userLogged = userByUsername;
+                    }
 
-                this.conn.commit();
-                this.conn.close();
+                    this.conn.commit();
+                    this.conn.close();
+                }
             } catch (Exception ex) {
                 ex.printStackTrace(System.out);
                 try {
@@ -94,7 +97,14 @@ public class UserService {
             }
         }
 
-        return logInProcess;
+        return userLogged != null;
+    }
+
+    private boolean isDataCorrect(User userToLog, User userToCompare) {
+        if (userToCompare != null) {
+            return userToCompare.getPassword().equals(userToLog.getPassword());
+        }
+        return false;
     }
 
     public User getUserLogged() { return userLogged; }
