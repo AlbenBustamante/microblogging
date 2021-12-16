@@ -1,6 +1,5 @@
 package com.danicode.microblogging.model.dao.implementations;
 
-import com.danicode.microblogging.services.ConnectionService;
 import com.danicode.microblogging.model.dao.templates.DAOUser;
 import com.danicode.microblogging.model.domain.User;
 
@@ -8,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.danicode.microblogging.services.ConnectionService.*;
 
 public class DAOUserImpl implements DAOUser {
     private Connection externConnection = null;
@@ -28,26 +29,25 @@ public class DAOUserImpl implements DAOUser {
 
     @Override
     public int create(User user) throws Exception {
-        Connection conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
-        PreparedStatement pstmt = conn.prepareStatement(SQL_INSERT);
-        pstmt.setString(1, user.getName());
-        pstmt.setString(2, user.getLastName());
-        pstmt.setString(3, user.getEmail());
-        pstmt.setString(4, user.getUsername());
-        pstmt.setString(5, user.getPassword());
+        Connection conn = this.externConnection == null ? getConnection() : this.externConnection;
+        PreparedStatement stmt = conn.prepareStatement(SQL_INSERT);
+        stmt.setString(1, user.getName());
+        stmt.setString(2, user.getLastName());
+        stmt.setString(3, user.getEmail());
+        stmt.setString(4, user.getUsername());
+        stmt.setString(5, user.getPassword());
 
-        var rowsUpdated = pstmt.executeUpdate();
-        ConnectionService.close(this.externConnection, conn, pstmt);
-
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
         return rowsUpdated;
     }
 
     @Override
     public List<User> list() throws Exception {
         List<User> users = new ArrayList<>();
-        var conn = this.externConnection != null ? this.externConnection : ConnectionService.getConnection();
-        var pstmt = conn.prepareStatement(SQL_SELECT);
-        var rs = pstmt.executeQuery();
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var stmt = conn.prepareStatement(SQL_SELECT);
+        var rs = stmt.executeQuery();
 
         while (rs.next()) {
             var user = new User(
@@ -57,46 +57,43 @@ public class DAOUserImpl implements DAOUser {
             users.add(user);
         }
 
-        ConnectionService.close(this.externConnection, conn, pstmt, rs);
-
+        close(this.externConnection, conn, stmt, rs);
         return users;
     }
 
     @Override
     public int update(User user) throws Exception {
-        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
-        var pstmt = conn.prepareStatement(SQL_UPDATE);
-        pstmt.setString(1, user.getName());
-        pstmt.setString(2, user.getLastName());
-        pstmt.setString(3, user.getEmail());
-        pstmt.setString(4, user.getUsername());
-        pstmt.setString(5, user.getPassword());
-        pstmt.setInt(6, user.getIdUser());
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(SQL_UPDATE);
+        stmt.setString(1, user.getName());
+        stmt.setString(2, user.getLastName());
+        stmt.setString(3, user.getEmail());
+        stmt.setString(4, user.getUsername());
+        stmt.setString(5, user.getPassword());
+        stmt.setInt(6, user.getIdUser());
 
-        var rowsUpdated = pstmt.executeUpdate();
-        ConnectionService.close(this.externConnection, conn, pstmt);
-
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
         return rowsUpdated;
     }
 
     @Override
     public int delete(int idUser) throws Exception {
-        var conn = this.externConnection != null ? this.externConnection : ConnectionService.getConnection();
-        var pstmt = conn.prepareStatement(SQL_DELETE);
-        pstmt.setInt(1, idUser);
-        var rowsUpdated = pstmt.executeUpdate();
-        ConnectionService.close(this.externConnection, conn, pstmt);
-
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var stmt = conn.prepareStatement(SQL_DELETE);
+        stmt.setInt(1, idUser);
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
         return rowsUpdated;
     }
 
     @Override
     public User findById(int idUser) throws Exception {
         User user = null;
-        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
-        var pstmt = conn.prepareStatement(SQL_SELECT_BY_ID);
-        pstmt.setInt(1, idUser);
-        var rs = pstmt.executeQuery();
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+        stmt.setInt(1, idUser);
+        var rs = stmt.executeQuery();
 
         if (rs.next()) {
             user = new User(
@@ -104,7 +101,7 @@ public class DAOUserImpl implements DAOUser {
                     rs.getString("email"), rs.getString("username"), rs.getString("password")
             );
         }
-        ConnectionService.close(this.externConnection, conn, pstmt, rs);
+        close(this.externConnection, conn, stmt, rs);
         return user;
     }
 
@@ -120,10 +117,10 @@ public class DAOUserImpl implements DAOUser {
 
     private User findByString(String query, String value) throws Exception {
         User user = null;
-        var conn = this.externConnection == null ? ConnectionService.getConnection() : this.externConnection;
-        var pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, value);
-        var rs = pstmt.executeQuery();
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(query);
+        stmt.setString(1, value);
+        var rs = stmt.executeQuery();
 
         if (rs.next()) {
             user = new User(
@@ -131,7 +128,7 @@ public class DAOUserImpl implements DAOUser {
                     rs.getString("email"), rs.getString("username"), rs.getString("password")
             );
         }
-        ConnectionService.close(this.externConnection, conn, pstmt, rs);
+        close(this.externConnection, conn, stmt, rs);
         return user;
     }
 }
