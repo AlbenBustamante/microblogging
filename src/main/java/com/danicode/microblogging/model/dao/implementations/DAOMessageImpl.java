@@ -3,6 +3,7 @@ package com.danicode.microblogging.model.dao.implementations;
 import com.danicode.microblogging.model.dao.templates.DAOMessage;
 import com.danicode.microblogging.model.dao.templates.DAOUser;
 import com.danicode.microblogging.model.domain.Message;
+import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ public class DAOMessageImpl implements DAOMessage {
         SQL_SELECT = "SELECT message_id, user_id_pk, date_time, message FROM messages;",
         SQL_UPDATE = "UPDATE messages SET message = ? WHERE message_id = ?;",
         SQL_DELETE = "DELETE FROM messages WHERE message_id = ?;",
-        SQL_SELECT_BY_ID = "SELECT user_id_pk, date_time, message FROM messages WHERE message_id = ?;";
+        SQL_SELECT_BY_ID = "SELECT user_id_pk, date_time, message FROM messages WHERE message_id = ?;",
+        SQL_SELECT_BY_USERNAME = "SELECT message_id FROM messages m INNER JOIN users AS u " +
+                "ON m.user_id_pk = u.user_id WHERE UPPER(username) = UPPER(?);";
 
     public DAOMessageImpl() {
         this.userDao = new DAOUserImpl();
@@ -100,7 +103,19 @@ public class DAOMessageImpl implements DAOMessage {
 
     @Override
     public List<Message> findByUsername(String username) throws Exception {
-        return null;
+        List<Message> messages = new ArrayList<>();
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var stmt = conn.prepareStatement(SQL_SELECT_BY_USERNAME);
+        stmt.setString(1, username);
+        var rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            var message = this.findById(rs.getInt("message_id"));
+            messages.add(message);
+        }
+
+        close(this.externConnection, conn, stmt, rs);
+        return messages;
     }
 
     @Override
