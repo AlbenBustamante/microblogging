@@ -62,7 +62,13 @@ public class DAOMessageImpl implements DAOMessage {
 
     @Override
     public int update(Message message) throws Exception {
-        return 0;
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var stmt = conn.prepareStatement(SQL_UPDATE);
+        stmt.setString(1, message.getMessage());
+        stmt.setInt(2, message.getIdMessage());
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
+        return rowsUpdated;
     }
 
     @Override
