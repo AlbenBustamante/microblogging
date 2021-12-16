@@ -27,7 +27,7 @@ public class DAOMessageImpl implements DAOMessage {
     }
 
     @Override
-    public int create(Message element) throws Exception {
+    public int create(Message message) throws Exception {
         return 0;
     }
 
@@ -37,22 +37,22 @@ public class DAOMessageImpl implements DAOMessage {
     }
 
     @Override
-    public int update(Message element) throws Exception {
+    public int update(Message message) throws Exception {
         return 0;
     }
 
     @Override
-    public int delete(int idElement) throws Exception {
+    public int delete(int idMessage) throws Exception {
         return 0;
     }
 
     @Override
-    public Message findById(int idElement) throws Exception {
+    public Message findById(int idMessage) throws Exception {
         return null;
     }
 
     @Override
-    public List<Message> findByUsername(int idUser) throws Exception {
+    public List<Message> findByUsername(String username) throws Exception {
         return null;
     }
 
