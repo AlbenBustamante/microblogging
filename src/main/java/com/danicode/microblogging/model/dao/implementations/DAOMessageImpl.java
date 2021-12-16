@@ -83,7 +83,19 @@ public class DAOMessageImpl implements DAOMessage {
 
     @Override
     public Message findById(int idMessage) throws Exception {
-        return null;
+        var message = new Message();
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+        stmt.setInt(1, idMessage);
+        var rs = stmt.executeQuery();
+
+        if (rs.next())  {
+            var user = this.userDao.findById(rs.getInt("user_id_pk"));
+            message = new Message(idMessage, user, rs.getString("date_time"), rs.getString("message"));
+        }
+
+        close(this.externConnection, conn, stmt, rs);
+        return message;
     }
 
     @Override
