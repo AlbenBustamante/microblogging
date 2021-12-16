@@ -5,6 +5,7 @@ import com.danicode.microblogging.model.dao.templates.DAOUser;
 import com.danicode.microblogging.model.domain.Message;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.danicode.microblogging.services.ConnectionService.*;
@@ -42,7 +43,21 @@ public class DAOMessageImpl implements DAOMessage {
 
     @Override
     public List<Message> list() throws Exception {
-        return null;
+        List<Message> messages = new ArrayList<>();
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(SQL_SELECT);
+        var rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            var user = this.userDao.findById(rs.getInt("user_id_pk"));
+            var message = new Message(
+                    rs.getInt("message_id"), user, rs.getString("date_time"), rs.getString("message")
+            );
+            messages.add(message);
+        }
+
+        close(this.externConnection, conn, stmt, rs);
+        return messages;
     }
 
     @Override
