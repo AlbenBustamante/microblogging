@@ -7,6 +7,8 @@ import com.danicode.microblogging.model.domain.Message;
 import java.sql.Connection;
 import java.util.List;
 
+import static com.danicode.microblogging.services.ConnectionService.*;
+
 public class DAOMessageImpl implements DAOMessage {
     private Connection externConnection;
     private DAOUser userDao;
@@ -28,7 +30,14 @@ public class DAOMessageImpl implements DAOMessage {
 
     @Override
     public int create(Message message) throws Exception {
-        return 0;
+        var conn = this.externConnection != null ? this.externConnection : getConnection();
+        var stmt = conn.prepareStatement(SQL_INSERT);
+        stmt.setInt(1, message.getUser().getIdUser());
+        stmt.setString(2, message.getDateTime());
+        stmt.setString(3, message.getMessage());
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
+        return rowsUpdated;
     }
 
     @Override
