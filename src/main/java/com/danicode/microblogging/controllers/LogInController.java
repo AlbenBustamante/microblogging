@@ -7,6 +7,8 @@ import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.UserService;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class LogInController {
     private GUILogIn logIn;
@@ -99,14 +101,13 @@ public class LogInController {
     }
 
     private void setActions() {
-        this.logInTemplate.getbLogIn().addActionListener(e -> this.logIn());
-        this.logInTemplate.getJUser().addActionListener(e -> this.logIn());
-        this.logInTemplate.getJPassword().addActionListener(e -> this.logIn());
-        this.signUpTemplate.getBSignUp().addActionListener(e -> this.signUp());
-        this.signUpTemplate.getJName().addActionListener(e -> this.signUp());
-        this.signUpTemplate.getJLastName().addActionListener(e -> this.signUp());
-        this.signUpTemplate.getJEmail().addActionListener(e -> this.signUp());
-        this.signUpTemplate.getJUsername().addActionListener(e -> this.signUp());
-        this.signUpTemplate.getJPassword().addActionListener(e -> this.signUp());
+        this.setActions(e -> this.logIn(), this.logInTemplate.getbLogIn(), this.logInTemplate.getJUser(), this.logInTemplate.getJPassword());
+        this.setActions(e -> this.signUp(), this.signUpTemplate.getBSignUp(), this.signUpTemplate.getJName(), this.signUpTemplate.getJLastName(),
+                this.signUpTemplate.getJEmail(), this.signUpTemplate.getJUsername(), this.signUpTemplate.getJPassword());
+    }
+
+    private void setActions(ActionListener event, JButton button, JTextField... fields) {
+        Arrays.stream(fields).forEach(field -> field.addActionListener(event));
+        button.addActionListener(event);
     }
 }
