@@ -19,6 +19,8 @@ public class PostMessageController implements DocumentListener {
     private void setActions() {
         var document = this.postMessage.getJPost().getDocument();
         document.addDocumentListener(this);
+
+        this.postMessage.getBExit().addActionListener(e -> this.postMessage.dispose());
     }
 
     private void init() {
