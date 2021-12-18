@@ -3,6 +3,7 @@ package com.danicode.microblogging.controllers;
 import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.messages.GUIPostMessage;
 import com.danicode.microblogging.model.domain.Message;
+import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.MessageService;
 import com.danicode.microblogging.services.UserService;
 
@@ -13,26 +14,36 @@ import java.awt.*;
 
 public class PostMessageController implements DocumentListener {
     private GUIPostMessage postMessage;
-    private UserService userService;
     private MessageService messageService;
+    private UserService userService;
 
     public PostMessageController() {
         this.postMessage = new GUIPostMessage(null);
+        this.messageService = new MessageService();
+        this.userService = new UserService();
         this.init();
     }
 
     private void postMessage() {
         var messageText = this.postMessage.getJPost().getText().strip();
-        if (messageText.length() <= 140) {
+        if (messageText.length() >= 1 && messageText.length() <= 140) {
             var message = new Message(this.userService.getUserLogged(), messageText);
-            this.messageService.createMessage(message);
-            JOptionPane.showMessageDialog(null, "¡Mensaje publicado con éxito!");
-            var option = JOptionPane.showConfirmDialog(null, "¿Deseas publicar otro?",
-                    "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (this.messageService.createMessage(message)) {
+                this.postMessage.getJPost().setText("");
+                JOptionPane.showMessageDialog(null, "¡Mensaje publicado con éxito!");
+                var option = JOptionPane.showConfirmDialog(null, "¿Deseas publicar otro?",
+                        "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-            if (option != 0) {
-                this.postMessage.dispose();
+                if (option != 0) {
+                    this.postMessage.dispose();
+                }
             }
+            else {
+                JOptionPane.showMessageDialog(null, "Algo salió mal");
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "El mensaje debe tener entre 1 y 140 caracteres");
         }
     }
 
