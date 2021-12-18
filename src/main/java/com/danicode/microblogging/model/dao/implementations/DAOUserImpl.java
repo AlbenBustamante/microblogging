@@ -33,7 +33,7 @@ public class DAOUserImpl implements DAOUser {
         PreparedStatement stmt = conn.prepareStatement(SQL_INSERT);
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getLastName());
-        stmt.setString(3, user.getEmail());
+        stmt.setString(3, user.getEmail().toLowerCase());
         stmt.setString(4, user.getUsername());
         stmt.setString(5, user.getPassword());
 
