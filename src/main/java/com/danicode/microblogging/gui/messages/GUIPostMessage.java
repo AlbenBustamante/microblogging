@@ -14,7 +14,7 @@ public class GUIPostMessage extends GUIDialog implements BlogConstants {
     private JPanel northPane, centerPane, southPane;
 
     public GUIPostMessage(JFrame owner) {
-        super(owner, 500, 320, "Mensaje a publicar", false, true, new BorderLayout());
+        super(owner, 500, 320, "Mensaje a publicar", false, false, new BorderLayout());
     }
 
     private void createLabels() {
