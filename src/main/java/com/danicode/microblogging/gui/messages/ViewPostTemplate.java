@@ -7,6 +7,7 @@ import java.awt.*;
 
 public class ViewPostTemplate extends JPanel {
     private JLabel lFullName, lUsername, lDateTime;
+    private JTextArea taMessage;
     private JScrollPane spMessage;
     private IGridBagLayout gbc;
 
@@ -21,12 +22,12 @@ public class ViewPostTemplate extends JPanel {
     }
 
     private void createMessageArea() {
-        var area = new JTextArea("sdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasd",7, 10);
-        area.setWrapStyleWord(true);
-        area.setLineWrap(true);
-        area.setBackground(this.getBackground());
-        area.setEditable(false);
-        this.spMessage = new JScrollPane(area);
+        this.taMessage = new JTextArea("sdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasd",7, 10);
+        this.taMessage.setWrapStyleWord(true);
+        this.taMessage.setLineWrap(true);
+        this.taMessage.setBackground(this.getBackground());
+        this.taMessage.setEditable(false);
+        this.spMessage = new JScrollPane(this.taMessage);
         this.spMessage.setBorder(null);
     }
 
@@ -65,4 +66,12 @@ public class ViewPostTemplate extends JPanel {
         this.initLayout();
         this.design();
     }
+
+    public JLabel getLFullName() { return this.lFullName; }
+
+    public JLabel getLUsername() { return this.lUsername; }
+
+    public JLabel getLDateTime() { return this.lDateTime; }
+
+    public JTextArea getTaMessage() { return this.taMessage; }
 }
