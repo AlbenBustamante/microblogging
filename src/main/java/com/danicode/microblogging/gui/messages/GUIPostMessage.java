@@ -1,11 +1,12 @@
 package com.danicode.microblogging.gui.messages;
 
+import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.model.GUIDialog;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GUIPostMessage extends GUIDialog {
+public class GUIPostMessage extends GUIDialog implements BlogConstants {
     private JLabel lPost, lCharacters, lBlank;
     private JTextArea jtaPost;
     private JScrollPane sPost;
