@@ -17,6 +17,11 @@ public class Message {
         this.setDateTime();
     }
 
+    public Message(int idMessage, String message) {
+        this.idMessage = idMessage;
+        this.message = message;
+    }
+
     public Message(int idMessage, User user, String dateTime, String message) {
         this.idMessage = idMessage;
         this.user = user;
