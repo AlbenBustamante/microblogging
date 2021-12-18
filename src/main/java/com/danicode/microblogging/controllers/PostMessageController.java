@@ -28,21 +28,17 @@ public class PostMessageController implements DocumentListener {
     private void checkCharacters() {
         var length = this.postMessage.getJPost().getText().strip().length();
         var remaining = 0;
-        var color = Color.BLACK;
-        var text = "";
 
         if (length > 140) {
-            remaining = - (this.postMessage.POST_LENGTH - length) + 1;
-            text = "Límite excedido: " + --remaining;
-            color = Color.RED;
+            remaining = - (this.postMessage.POST_LENGTH - length);
+            this.postMessage.getLCharacters().setText("Límite excedido: " + remaining);
+            this.postMessage.getLCharacters().setForeground(Color.RED);
         }
         else {
             remaining = this.postMessage.POST_LENGTH - length;
-            text = this.postMessage.CHARACTERS_REMAINING + remaining;
+            this.postMessage.getLCharacters().setText(this.postMessage.CHARACTERS_REMAINING + remaining);
+            this.postMessage.getLCharacters().setForeground(Color.DARK_GRAY);
         }
-
-        this.postMessage.getLCharacters().setText(text);
-        this.postMessage.getLCharacters().setForeground(color);
     }
 
     @Override
