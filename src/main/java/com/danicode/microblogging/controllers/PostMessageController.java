@@ -2,6 +2,9 @@ package com.danicode.microblogging.controllers;
 
 import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.messages.GUIPostMessage;
+import com.danicode.microblogging.model.domain.Message;
+import com.danicode.microblogging.services.MessageService;
+import com.danicode.microblogging.services.UserService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -10,10 +13,27 @@ import java.awt.*;
 
 public class PostMessageController implements DocumentListener {
     private GUIPostMessage postMessage;
+    private UserService userService;
+    private MessageService messageService;
 
     public PostMessageController() {
         this.postMessage = new GUIPostMessage(null);
         this.init();
+    }
+
+    private void postMessage() {
+        var messageText = this.postMessage.getJPost().getText().strip();
+        if (messageText.length() <= 140) {
+            var message = new Message(this.userService.getUserLogged(), messageText);
+            this.messageService.createMessage(message);
+            JOptionPane.showMessageDialog(null, "¡Mensaje publicado con éxito!");
+            var option = JOptionPane.showConfirmDialog(null, "¿Deseas publicar otro?",
+                    "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (option != 0) {
+                this.postMessage.dispose();
+            }
+        }
     }
 
     private void setActions() {
@@ -21,6 +41,7 @@ public class PostMessageController implements DocumentListener {
         document.addDocumentListener(this);
 
         this.postMessage.getBExit().addActionListener(e -> this.postMessage.dispose());
+        this.postMessage.getBPost().addActionListener(e -> this.postMessage());
     }
 
     private void init() {
