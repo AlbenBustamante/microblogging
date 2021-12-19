@@ -10,7 +10,6 @@ import com.danicode.microblogging.services.MessageService;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 public class ViewMessagesController {
@@ -60,6 +59,7 @@ public class ViewMessagesController {
         for (int i = 0; i < cycles; i ++) {
             this.postTemplate[i] = new ViewPostTemplate();
             this.postTemplate[i].addMouseListener(this.popupAction(i));
+            this.setActions(i);
             this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
             this.setData(i, this.messages.get(i));
         }
@@ -136,6 +136,24 @@ public class ViewMessagesController {
                 postTemplate[index].getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
             }
         };
+    }
+
+    private void viewProfile(int index) {
+        System.out.println("perfil " + index);
+    }
+
+    private void editMessage(int index) {
+        System.out.println("editar mensaje " + index);
+    }
+
+    private void deleteMessage(int index) {
+        System.out.println("eliminar mensaje " + index);
+    }
+
+    private void setActions(int index) {
+        this.postTemplate[index].getMenuViewProfile().addActionListener(e -> this.viewProfile(index));
+        this.postTemplate[index].getMenuEditMessage().addActionListener(e -> this.editMessage(index));
+        this.postTemplate[index].getMenuDeleteMessages().addActionListener(e -> this.deleteMessage(index));
     }
 
     private void setActions() {
