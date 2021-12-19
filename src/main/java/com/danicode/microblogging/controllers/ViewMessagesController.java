@@ -11,14 +11,13 @@ import java.util.List;
 
 public class ViewMessagesController {
     private int index = 1, pages;
-    private ViewPostTemplate postTemplate;
     private List<Message> messages;
     private JLabel lPageIndex;
     private final GUIViewMessages messagesTemplate;
     private final MessageService service;
+    private final ViewPostTemplate[] postTemplate = new ViewPostTemplate[10];
 
     public ViewMessagesController() {
-        this.postTemplate = new ViewPostTemplate();
         this.messagesTemplate = new GUIViewMessages(null);
         this.service = new MessageService();
         this.messages = this.service.getMessages();
@@ -43,28 +42,29 @@ public class ViewMessagesController {
         this.messagesTemplate.getCenterPane().add(this.lPageIndex);
     }
 
-    private void setData(Message message) {
-        this.postTemplate = new ViewPostTemplate();
-        this.postTemplate.getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
-        this.postTemplate.getLUsername().setText("@" + message.getUser().getUsername());
-        this.postTemplate.getLDateTime().setText(message.getDateTime());
-        this.postTemplate.getTaMessage().setText(message.getMessage());
+    private void setData(int index, Message message) {
+        this.postTemplate[index] = new ViewPostTemplate();
+        this.postTemplate[index].getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
+        this.postTemplate[index].getLUsername().setText("@" + message.getUser().getUsername());
+        this.postTemplate[index].getLDateTime().setText(message.getDateTime());
+        this.postTemplate[index].getTaMessage().setText(message.getMessage());
     }
 
     private void loadMainData() {
         var size = this.messages.size();
 
         if (size <= 10) {
-            this.messages.forEach(message -> {
-                this.setData(message);
-                this.messagesTemplate.getCenterPane().add(this.postTemplate);
-            });
+            for (int i = 0; i < size; i ++) {
+                var message = this.messages.get(i);
+                this.setData(i, message);
+                this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
+            }
         }
         else {
             for (int i = 0; i < 10; i ++) {
                 var message = this.messages.get(i);
-                this.setData(message);
-                this.messagesTemplate.getCenterPane().add(this.postTemplate);
+                this.setData(i, message);
+                this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
             }
         }
     }
