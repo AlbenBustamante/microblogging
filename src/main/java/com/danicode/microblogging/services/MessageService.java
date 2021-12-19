@@ -4,6 +4,7 @@ import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.model.dao.implementations.DAOMessageImpl;
 import com.danicode.microblogging.model.dao.templates.DAOMessage;
 import com.danicode.microblogging.model.domain.Message;
+import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
 import java.util.List;
@@ -72,5 +73,10 @@ public class MessageService {
             }
         }
         return messages;
+    }
+
+    private User getAuthor(String username) {
+        var service = new UserService();
+        return service.getUser(username);
     }
 }
