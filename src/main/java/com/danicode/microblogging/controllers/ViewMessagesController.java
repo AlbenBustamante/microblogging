@@ -109,13 +109,9 @@ public class ViewMessagesController {
 
         if (filter == BlogConstants.LIST_USER_MESSAGES) {
             var username = this.messagesTemplate.getTfSearch().getText().strip();
-            if (username.equals("")) {
-                JOptionPane.showMessageDialog(null, "Por favor, introduzca el nombre de usuario a filtrar");
-            } else {
-                var user = new User();
-                user.setUsername(username);
-                message.setUser(user);
-            }
+            var user = new User();
+            user.setUsername(username);
+            message.setUser(user);
         }
 
         this.messages = service.getMessages(filter, message);
@@ -124,7 +120,8 @@ public class ViewMessagesController {
             this.refreshPage();
         }
         else {
-            JOptionPane.showMessageDialog(null, "No se han encontrado resultados");
+            JOptionPane.showMessageDialog(null, !message.getUser().getUsername().equals("") ?
+                    "No se han encontrado resultados" : "Por favor, escribe el nombre de usuario a filtrar");
         }
     }
 
