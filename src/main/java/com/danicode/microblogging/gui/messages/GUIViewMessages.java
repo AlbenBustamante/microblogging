@@ -9,7 +9,7 @@ public class GUIViewMessages extends GUIDialog {
     private JPanel northPane, centerPane, southPane;
     private JTextField tfSearch;
     private JComboBox<String> cbSearchType;
-    private JButton bSearch, bExit;
+    private JButton bSearch, bExit, bPrevious, bNext;
     private JScrollPane scCenterPane;
 
     public GUIViewMessages(JFrame owner) {
@@ -45,15 +45,17 @@ public class GUIViewMessages extends GUIDialog {
     private void createButtons() {
         this.bSearch = new JButton("Buscar");
         this.bExit = new JButton("Regresar");
+        this.bPrevious = new JButton("<<");
+        this.bNext = new JButton(">>");
     }
 
     private void design() {
-        /* North Pane */
         this.northPane.add(this.tfSearch);
         this.northPane.add(this.cbSearchType);
         this.northPane.add(this.bSearch);
 
-        /* South Pane */
+        this.southPane.add(this.bPrevious);
+        this.southPane.add(this.bNext);
         this.southPane.add(this.bExit);
 
         this.getContentPane().add(this.northPane, BorderLayout.NORTH);
@@ -82,6 +84,10 @@ public class GUIViewMessages extends GUIDialog {
     public JButton getBSearch() { return this.bSearch; }
 
     public JButton getBExit() { return this.bExit; }
+
+    public JButton getBPrevious() { return this.bPrevious; }
+
+    public JButton getBNext() { return this.bNext; }
 
     public JPanel getCenterPane() { return this.centerPane; }
 
