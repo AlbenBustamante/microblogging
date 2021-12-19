@@ -9,8 +9,8 @@ import javax.swing.*;
 
 public class ViewMessagesController {
     private ViewPostTemplate postTemplate;
-    private GUIViewMessages messagesTemplate;
-    private MessageService service;
+    private final GUIViewMessages messagesTemplate;
+    private final MessageService service;
 
     public ViewMessagesController() {
         this.postTemplate = new ViewPostTemplate();
@@ -35,7 +35,26 @@ public class ViewMessagesController {
         });
     }
 
+    private void nextPage() { }
+
+    private void previousPage() { }
+
+    private void search() { }
+
+    private void searchByMessage() { }
+
+    private void searchMessageByUser() { }
+
+    private void setActions() {
+        this.messagesTemplate.getBExit().addActionListener(e -> this.messagesTemplate.dispose());
+        this.messagesTemplate.getBNext().addActionListener(e -> this.nextPage());
+        this.messagesTemplate.getBPrevious().addActionListener(e -> this.previousPage());
+        this.messagesTemplate.getBSearch().addActionListener(e -> this.search());
+        this.messagesTemplate.getTfSearch().addActionListener(e -> this.search());
+    }
+
     private void init() {
+        this.setActions();
         this.loadMainData();
     }
 }
