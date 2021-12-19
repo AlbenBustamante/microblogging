@@ -57,4 +57,11 @@ public class GUIViewMessages extends GUIDialog {
         this.createButtons();
         this.design();
     }
+
+    public JTextField getTfSearch() { return this.tfSearch; }
+
+    public JComboBox<String> getCbSearchType() { return this.cbSearchType; }
+
+    public JButton getBSearch() { return this.bSearch; }
+
 }
