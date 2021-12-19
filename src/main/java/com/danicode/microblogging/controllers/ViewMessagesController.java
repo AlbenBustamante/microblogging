@@ -5,11 +5,11 @@ import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 
 import javax.swing.*;
 
-public class ViewPostController {
+public class ViewMessagesController {
     private ViewPostTemplate postTemplate;
     private GUIViewMessages messagesTemplate;
 
-    public ViewPostController() {
+    public ViewMessagesController() {
         this.postTemplate = new ViewPostTemplate();
         this.messagesTemplate = new GUIViewMessages(null);
         this.init();
