@@ -75,7 +75,7 @@ public class MessageService {
         return messages;
     }
 
-    private User getAuthor(String username) {
+    public User getAuthor(String username) {
         var service = new UserService();
         return service.getUser(username);
     }
