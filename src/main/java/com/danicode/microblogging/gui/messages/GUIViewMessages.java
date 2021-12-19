@@ -6,10 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIViewMessages extends GUIDialog {
-    private JPanel northPane, centerPane;
+    private JPanel northPane, centerPane, southPane;
     private JTextField tfSearch;
     private JComboBox<String> cbSearchType;
-    private JButton bSearch;
+    private JButton bSearch, bExit;
     private JScrollPane scCenterPane;
 
     public GUIViewMessages(JFrame owner) {
@@ -26,6 +26,10 @@ public class GUIViewMessages extends GUIDialog {
         this.centerPane.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 4000));
         this.scCenterPane = new JScrollPane(this.centerPane);
         this.scCenterPane.setBorder(null);
+
+        this.southPane = new JPanel();
+        this.southPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 18, 10));
+        this.southPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY));
     }
 
     private void createFields() {
@@ -40,6 +44,7 @@ public class GUIViewMessages extends GUIDialog {
 
     private void createButtons() {
         this.bSearch = new JButton("Buscar");
+        this.bExit = new JButton("Regresar");
     }
 
     private void design() {
@@ -55,8 +60,12 @@ public class GUIViewMessages extends GUIDialog {
             this.centerPane.add(jtf[i]);
         }
 
+        /* South Pane */
+        this.southPane.add(this.bExit);
+
         this.getContentPane().add(this.northPane, BorderLayout.NORTH);
         this.getContentPane().add(this.scCenterPane, BorderLayout.CENTER);
+        this.getContentPane().add(this.southPane, BorderLayout.SOUTH);
     }
 
     @Override
