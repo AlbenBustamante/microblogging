@@ -19,6 +19,7 @@ public class ViewMessagesController {
     }
 
     private void setData(Message message) {
+        this.postTemplate = new ViewPostTemplate();
         this.postTemplate.getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
         this.postTemplate.getLUsername().setText("@" + message.getUser().getUsername());
         this.postTemplate.getLDateTime().setText(message.getDateTime());
@@ -28,7 +29,6 @@ public class ViewMessagesController {
     private void loadMainData() {
         var messages = this.service.getMessages();
         messages.forEach(message -> {
-             this.postTemplate = new ViewPostTemplate();
              this.setData(message);
              this.messagesTemplate.getCenterPane().add(this.postTemplate);
         });
