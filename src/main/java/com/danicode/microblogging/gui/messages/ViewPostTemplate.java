@@ -16,13 +16,13 @@ public class ViewPostTemplate extends JPanel {
     }
 
     private void createLabels() {
-        this.lFullName = new JLabel("Nombre Completo");
-        this.lUsername = new JLabel("@usuario");
-        this.lDateTime = new JLabel("5:22:02 pm");
+        this.lFullName = new JLabel();
+        this.lUsername = new JLabel();
+        this.lDateTime = new JLabel();
     }
 
     private void createMessageArea() {
-        this.taMessage = new JTextArea("sdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdsdasdasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasdasdasdasdasdasdsasd",7, 10);
+        this.taMessage = new JTextArea(7, 10);
         this.taMessage.setWrapStyleWord(true);
         this.taMessage.setLineWrap(true);
         this.taMessage.setBackground(this.getBackground());
