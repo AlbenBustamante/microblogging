@@ -107,6 +107,33 @@ public class UserService {
         return false;
     }
 
+    public User getUser(String username) {
+        User user = null;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.userDao = new DAOUserImpl(this.conn);
+
+            user = this.userDao.findByUsername(username);
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+
+        return user != null ? user : new User(
+                "Nombre y ", "apellido no encontrado", "Email no encontrado", "Usuario no encontrado", ""
+        );
+    }
+
     public User getUserLogged() { return userLogged; }
 
     public void resetUserLogged() { userLogged = null; }
