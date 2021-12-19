@@ -109,13 +109,14 @@ public class ViewMessagesController {
     }
 
     private void search(int filter) {
+        var text = this.messagesTemplate.getTfSearch().getText().strip();
         var message = new Message();
 
         if (filter == BlogConstants.LIST_USER_MESSAGES) {
-            var username = this.messagesTemplate.getTfSearch().getText().strip();
-            var user = new User();
-            user.setUsername(username);
-            message.setUser(user);
+            message.setUser(new User("", "", "", text, ""));
+        }
+        else if (filter == BlogConstants.LIST_BY_MESSAGE) {
+            message.setMessage(text);
         }
 
         this.messages = service.getMessages(filter, message);
@@ -124,8 +125,7 @@ public class ViewMessagesController {
             this.refreshPage();
         }
         else {
-            JOptionPane.showMessageDialog(null, !message.getUser().getUsername().equals("") ?
-                    "No se han encontrado resultados" : "Por favor, escribe el nombre de usuario a filtrar");
+            JOptionPane.showMessageDialog(null, "No se han encontrado resultados");
         }
     }
 
