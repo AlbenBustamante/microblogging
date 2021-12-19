@@ -13,9 +13,10 @@ public class GUIEditProfile extends GUIDialog {
     private JButton bAccept, bCancel, bApply;
     private JPanel northPane, centerPane, southPane;
     private IGridBagLayout gbc;
+    private static final int WIDTH = 3;
 
     public GUIEditProfile(JFrame owner) {
-        super(owner, 420, 500, "Editar y/o actualizar información", false, false, new GridBagLayout());
+        super(owner, 420, 500, "Editar y/o actualizar información", false, false, new BorderLayout());
     }
 
     private void createLabels() {
@@ -24,7 +25,7 @@ public class GUIEditProfile extends GUIDialog {
         this.lEmail = new JLabel("Email");
         this.lPassword = new JLabel("Constraseña");
         this.lUsername = new JLabel("Usuario");
-        this.lUsername.setFont(this.lUsername.getFont().deriveFont(18f));
+        this.lUsername.setFont(this.lUsername.getFont().deriveFont(15f));
     }
 
     private void createFields() {
@@ -44,13 +45,49 @@ public class GUIEditProfile extends GUIDialog {
         this.northPane = new JPanel();
         this.centerPane = new JPanel();
         this.southPane = new JPanel();
+
+        this.centerPane.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.GRAY));
     }
 
     private void setLayouts() {
-        this.northPane.setLayout(new FlowLayout(FlowLayout.LEFT, 18, 20));
+        this.northPane.setLayout(new FlowLayout(FlowLayout.LEFT, 24, 20));
         this.centerPane.setLayout(new GridBagLayout());
-        this.southPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 18, 10));
+        this.southPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 8, 10));
         this.gbc = () -> this.centerPane;
+    }
+
+    private void design() {
+        this.northPane.add(this.lUsername);
+
+        final int WIDTH = 3;
+        this.gbc.GBC.ipadx = 8;
+        this.gbc.GBC.ipady = 4;
+
+        this.gbc.addSpaces(0, WIDTH);
+
+        this.addConstraints(0, this.lName, this.tfName);
+        this.addConstraints(3, this.lLastName, this.tfLastName);
+        this.addConstraints(4, this.lEmail, this.tfEmail);
+        this.addConstraints(6, this.lPassword, this.pfPassword);
+
+        this.gbc.addVertical(1, 2, 1, 1.0, 1.0, GridBagConstraints.HORIZONTAL, this.lLastName,
+                1.0, 0, GridBagConstraints.HORIZONTAL, this.tfLastName);
+        this.gbc.addFinalSpaces(WIDTH, 2);
+
+        this.southPane.add(this.bApply);
+        this.southPane.add(this.bAccept);
+        this.southPane.add(this.bCancel);
+        this.southPane.add(new JLabel("    "));
+
+        this.getContentPane().add(this.northPane, BorderLayout.NORTH);
+        this.getContentPane().add(this.centerPane, BorderLayout.CENTER);
+        this.getContentPane().add(this.southPane, BorderLayout.SOUTH);
+    }
+
+    private void addConstraints(int y, JLabel label, JTextField field) {
+        this.gbc.addVertical(1, y, 1, 1.0, 0, GridBagConstraints.HORIZONTAL, label,
+                1.0, 0, GridBagConstraints.HORIZONTAL, field);
+        this.gbc.addFinalSpaces(WIDTH, y + 2);
     }
 
     @Override
@@ -65,5 +102,6 @@ public class GUIEditProfile extends GUIDialog {
         this.createFields();
         this.createButtons();
         this.setLayouts();
+        this.design();
     }
 }
