@@ -6,13 +6,16 @@ import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.services.MessageService;
 
+import javax.swing.*;
 import java.util.List;
 
 public class ViewMessagesController {
+    private int index = 1, pages;
     private ViewPostTemplate postTemplate;
+    private List<Message> messages;
+    private JLabel lPageIndex;
     private final GUIViewMessages messagesTemplate;
     private final MessageService service;
-    private List<Message> messages;
 
     public ViewMessagesController() {
         this.postTemplate = new ViewPostTemplate();
@@ -20,6 +23,20 @@ public class ViewMessagesController {
         this.service = new MessageService();
         this.messages = this.service.getMessages();
         this.init();
+    }
+
+    private void setNumberPages() {
+        this.pages = 0;
+        for (int i = 0; i < this.messages.size(); i ++) {
+            if (i % 10 == 0) {
+                this.pages ++;
+            }
+        }
+    }
+
+    private void createLabel() {
+        this.lPageIndex = new JLabel("Página " + this.index + " de " + this.pages);
+        this.messagesTemplate.getCenterPane().add(this.lPageIndex);
     }
 
     private void setData(Message message) {
@@ -48,9 +65,13 @@ public class ViewMessagesController {
         }
     }
 
-    private void nextPage() { }
+    private void nextPage() {
+        this.index ++;
+    }
 
-    private void previousPage() { }
+    private void previousPage() {
+        this.index --;
+    }
 
     private void search() {
         var optionSelected = String.valueOf(this.messagesTemplate.getCbSearchType().getSelectedItem());
@@ -78,7 +99,9 @@ public class ViewMessagesController {
     }
 
     private void init() {
+        this.setNumberPages();
         this.setActions();
         this.loadMainData();
+        this.createLabel();
     }
 }
