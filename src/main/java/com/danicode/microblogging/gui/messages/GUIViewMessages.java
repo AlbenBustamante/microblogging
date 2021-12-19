@@ -6,10 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIViewMessages extends GUIDialog {
-    private JPanel northPane;
+    private JPanel northPane, centerPane;
     private JTextField tfSearch;
     private JComboBox<String> cbSearchType;
     private JButton bSearch;
+    private JScrollPane scCenterPane;
 
     public GUIViewMessages(JFrame owner) {
         super(owner, 560, 700, "Microblogging", false, false, new BorderLayout());
@@ -19,6 +20,12 @@ public class GUIViewMessages extends GUIDialog {
         this.northPane = new JPanel();
         this.northPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
         this.northPane.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+
+        this.centerPane = new JPanel();
+        this.centerPane.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 20));
+        this.centerPane.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 4000));
+        this.scCenterPane = new JScrollPane(this.centerPane);
+        this.scCenterPane.setBorder(null);
     }
 
     private void createFields() {
@@ -41,7 +48,15 @@ public class GUIViewMessages extends GUIDialog {
         this.northPane.add(this.cbSearchType);
         this.northPane.add(this.bSearch);
 
+        JTextField[] jtf = new JTextField[100];
+        /* Center Pane */
+        for (int i = 0; i < jtf.length; i ++) {
+            jtf[i] = new JTextField(30);
+            this.centerPane.add(jtf[i]);
+        }
+
         this.getContentPane().add(this.northPane, BorderLayout.NORTH);
+        this.getContentPane().add(this.scCenterPane, BorderLayout.CENTER);
     }
 
     @Override
