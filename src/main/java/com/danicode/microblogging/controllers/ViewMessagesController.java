@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.util.List;
 
 public class ViewMessagesController {
-    private int index = 1, pages;
+    private int currentPage = 1, totalPages;
     private List<Message> messages;
     private JLabel lPageIndex;
     private final GUIViewMessages messagesTemplate;
@@ -24,26 +24,25 @@ public class ViewMessagesController {
         this.init();
     }
 
-    private void setNumberPages() {
-        this.pages = 0;
+    private void setTotalPages() {
+        this.totalPages = 0;
         for (int i = 0; i < this.messages.size(); i ++) {
             if (i % 10 == 0) {
-                this.pages ++;
+                this.totalPages ++;
             }
         }
     }
 
     private void resetLabel() {
-        this.lPageIndex.setText("Página " + this.index + " de " + this.pages);
+        this.lPageIndex.setText("Página " + this.currentPage + " de " + this.totalPages);
     }
 
     private void createLabel() {
-        this.lPageIndex = new JLabel("Página " + this.index + " de " + this.pages);
+        this.lPageIndex = new JLabel("Página " + this.currentPage + " de " + this.totalPages);
         this.messagesTemplate.getCenterPane().add(this.lPageIndex);
     }
 
     private void setData(int index, Message message) {
-        this.postTemplate[index] = new ViewPostTemplate();
         this.postTemplate[index].getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
         this.postTemplate[index].getLUsername().setText("@" + message.getUser().getUsername());
         this.postTemplate[index].getLDateTime().setText(message.getDateTime());
@@ -52,33 +51,25 @@ public class ViewMessagesController {
 
     private void loadMainData() {
         var size = this.messages.size();
+        var cycles = Math.min(size, 10);
 
-        if (size <= 10) {
-            for (int i = 0; i < size; i ++) {
-                var message = this.messages.get(i);
-                this.setData(i, message);
-                this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
-            }
-        }
-        else {
-            for (int i = 0; i < 10; i ++) {
-                var message = this.messages.get(i);
-                this.setData(i, message);
-                this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
-            }
+        for (int i = 0; i < cycles; i ++) {
+            this.postTemplate[i] = new ViewPostTemplate();
+            this.setData(i, this.messages.get(i));
+            this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
         }
     }
 
     private void nextPage() {
-        if (this.index < this.pages) {
-            this.index ++;
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
             this.resetLabel();
         }
     }
 
     private void previousPage() {
-        if (this.index > 1) {
-            this.index --;
+        if (this.currentPage > 1) {
+            this.currentPage--;
             this.resetLabel();
         }
     }
@@ -109,7 +100,7 @@ public class ViewMessagesController {
     }
 
     private void init() {
-        this.setNumberPages();
+        this.setTotalPages();
         this.setActions();
         this.loadMainData();
         this.createLabel();
