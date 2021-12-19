@@ -2,6 +2,7 @@ package com.danicode.microblogging.controllers;
 
 import com.danicode.microblogging.gui.messages.GUIViewMessages;
 import com.danicode.microblogging.gui.messages.ViewPostTemplate;
+import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.services.MessageService;
 
 import javax.swing.*;
@@ -18,12 +19,23 @@ public class ViewMessagesController {
         this.init();
     }
 
-    private void init() {
-        var messages = this.service.getMessages();
-        for (int i = 0; i < messages.size(); i ++) {
-            this.messagesTemplate.getCenterPane().add(new ViewPostTemplate());
-        }
+    private void setData(Message message) {
+        this.postTemplate.getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
+        this.postTemplate.getLUsername().setText("@" + message.getUser().getUsername());
+        this.postTemplate.getLDateTime().setText(message.getDateTime());
+        this.postTemplate.getTaMessage().setText(message.getMessage());
+    }
 
-        this.messagesTemplate.getCenterPane().add(new JLabel("Página 1 de 10"));
+    private void loadMainData() {
+        var messages = this.service.getMessages();
+        messages.forEach(message -> {
+             this.postTemplate = new ViewPostTemplate();
+             this.setData(message);
+             this.messagesTemplate.getCenterPane().add(this.postTemplate);
+        });
+    }
+
+    private void init() {
+        this.loadMainData();
     }
 }
