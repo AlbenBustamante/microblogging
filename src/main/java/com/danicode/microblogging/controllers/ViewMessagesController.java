@@ -1,11 +1,10 @@
 package com.danicode.microblogging.controllers;
 
+import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.messages.GUIViewMessages;
 import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.services.MessageService;
-
-import javax.swing.*;
 
 public class ViewMessagesController {
     private ViewPostTemplate postTemplate;
@@ -39,7 +38,18 @@ public class ViewMessagesController {
 
     private void previousPage() { }
 
-    private void search() { }
+    private void search() {
+        var optionSelected = String.valueOf(this.messagesTemplate.getCbSearchType().getSelectedItem());
+        if (optionSelected.equals(BlogConstants.SEARCH_BY_MESSAGE)) {
+            this.searchByMessage();
+        }
+        else if (optionSelected.equals(BlogConstants.SEARCH_MESSAGE_BY_USER)) {
+            this.searchMessageByUser();
+        }
+        else {
+            this.loadMainData();
+        }
+    }
 
     private void searchByMessage() { }
 

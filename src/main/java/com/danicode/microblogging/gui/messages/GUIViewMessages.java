@@ -1,5 +1,6 @@
 package com.danicode.microblogging.gui.messages;
 
+import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.model.GUIDialog;
 
 import javax.swing.*;
@@ -33,12 +34,12 @@ public class GUIViewMessages extends GUIDialog {
     }
 
     private void createFields() {
-        this.tfSearch = new JTextField("Buscador", 20);
+        this.tfSearch = new JTextField("Buscar mensajes...", 20);
     }
 
     private void createComboBoxes() {
         this.cbSearchType = new JComboBox<>(new String[] {
-                "Mensajes", "Por Usuario"
+                BlogConstants.SEARCH_MESSAGES, BlogConstants.SEARCH_BY_MESSAGE, BlogConstants.SEARCH_MESSAGE_BY_USER
         });
     }
 
