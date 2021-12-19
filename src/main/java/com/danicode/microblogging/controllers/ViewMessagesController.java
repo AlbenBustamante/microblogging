@@ -4,6 +4,7 @@ import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.messages.GUIViewMessages;
 import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 import com.danicode.microblogging.model.domain.Message;
+import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.MessageService;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class ViewMessagesController {
     public ViewMessagesController() {
         this.messagesTemplate = new GUIViewMessages(null);
         this.service = new MessageService();
-        this.messages = this.service.getMessages();
+        this.messages = this.service.getMessages(BlogConstants.LIST_MESSAGES, null);
         this.init();
     }
 
@@ -60,7 +61,8 @@ public class ViewMessagesController {
         }
     }
 
-    private void changePage() {
+    private void refreshPage() {
+        this.setTotalPages();
         var elements = (this.currentPage - 1) * 10;
 
         for (int i = elements, j = 0; j < 10; i ++, j ++) {
@@ -78,40 +80,60 @@ public class ViewMessagesController {
     private void nextPage() {
         if (this.currentPage < this.totalPages) {
             this.currentPage ++;
-            this.changePage();
+            this.refreshPage();
         }
     }
 
     private void previousPage() {
         if (this.currentPage > 1) {
             this.currentPage --;
-            this.changePage();
+            this.refreshPage();
         }
     }
 
-    private void search() {
+    private void checkSearchResult() {
         var optionSelected = String.valueOf(this.messagesTemplate.getCbSearchType().getSelectedItem());
         if (optionSelected.equals(BlogConstants.SEARCH_BY_MESSAGE)) {
-            this.searchByMessage();
+            this.search(BlogConstants.LIST_BY_MESSAGE);
         }
         else if (optionSelected.equals(BlogConstants.SEARCH_MESSAGE_BY_USER)) {
-            this.searchMessageByUser();
+            this.search(BlogConstants.LIST_USER_MESSAGES);
         }
         else {
-            this.loadMainData();
+            this.search(BlogConstants.LIST_MESSAGES);
         }
     }
 
-    private void searchByMessage() { }
+    private void search(int filter) {
+        var message = new Message();
 
-    private void searchMessageByUser() { }
+        if (filter == BlogConstants.LIST_USER_MESSAGES) {
+            var username = this.messagesTemplate.getTfSearch().getText().strip();
+            if (username.equals("")) {
+                JOptionPane.showMessageDialog(null, "Por favor, introduzca el nombre de usuario a filtrar");
+            } else {
+                var user = new User();
+                user.setUsername(username);
+                message.setUser(user);
+            }
+        }
+
+        this.messages = service.getMessages(filter, message);
+
+        if (!this.messages.isEmpty()) {
+            this.refreshPage();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No se han encontrado resultados");
+        }
+    }
 
     private void setActions() {
         this.messagesTemplate.getBExit().addActionListener(e -> this.messagesTemplate.dispose());
         this.messagesTemplate.getBNext().addActionListener(e -> this.nextPage());
         this.messagesTemplate.getBPrevious().addActionListener(e -> this.previousPage());
-        this.messagesTemplate.getBSearch().addActionListener(e -> this.search());
-        this.messagesTemplate.getTfSearch().addActionListener(e -> this.search());
+        this.messagesTemplate.getBSearch().addActionListener(e -> this.checkSearchResult());
+        this.messagesTemplate.getTfSearch().addActionListener(e -> this.checkSearchResult());
     }
 
     private void init() {
