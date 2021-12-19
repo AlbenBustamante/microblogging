@@ -23,7 +23,7 @@ public class GUIViewMessages extends GUIDialog {
 
         this.centerPane = new JPanel();
         this.centerPane.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 20));
-        this.centerPane.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 4000));
+        this.centerPane.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 2655));
         this.scCenterPane = new JScrollPane(this.centerPane);
         this.scCenterPane.setBorder(null);
 
