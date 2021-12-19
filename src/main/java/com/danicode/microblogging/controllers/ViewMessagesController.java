@@ -34,6 +34,10 @@ public class ViewMessagesController {
         }
     }
 
+    private void resetLabel() {
+        this.lPageIndex.setText("Página " + this.index + " de " + this.pages);
+    }
+
     private void createLabel() {
         this.lPageIndex = new JLabel("Página " + this.index + " de " + this.pages);
         this.messagesTemplate.getCenterPane().add(this.lPageIndex);
@@ -66,11 +70,17 @@ public class ViewMessagesController {
     }
 
     private void nextPage() {
-        this.index ++;
+        if (this.index < this.pages) {
+            this.index ++;
+            this.resetLabel();
+        }
     }
 
     private void previousPage() {
-        this.index --;
+        if (this.index > 1) {
+            this.index --;
+            this.resetLabel();
+        }
     }
 
     private void search() {
