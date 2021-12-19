@@ -73,4 +73,18 @@ public class GUIMainMenu extends GUIWindow {
         this.setMenus();
         this.setJMenuBar(this.menuBar);
     }
+
+    public JMenuItem getFileLogOut() { return this.mFileLogOut; }
+
+    public JMenuItem getFileExit() { return this.mFileExit; }
+
+    public JMenuItem getProfileEdit() { return this.mProfileEdit; }
+
+    public JMenuItem getProfileVisualize() { return this.mProfileVisualize; }
+
+    public JMenuItem getPostingSurf() { return this.mPostingSurf; }
+
+    public JMenuItem getPostingPost() { return this.mPostingPost; }
+
+    public JMenuItem getAboutUs() { return this.mAboutUs; }
 }
