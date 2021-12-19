@@ -8,6 +8,9 @@ import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.MessageService;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 public class ViewMessagesController {
@@ -56,8 +59,9 @@ public class ViewMessagesController {
 
         for (int i = 0; i < cycles; i ++) {
             this.postTemplate[i] = new ViewPostTemplate();
-            this.setData(i, this.messages.get(i));
+            this.postTemplate[i].addMouseListener(this.popupAction(i));
             this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
+            this.setData(i, this.messages.get(i));
         }
     }
 
@@ -123,6 +127,15 @@ public class ViewMessagesController {
             JOptionPane.showMessageDialog(null, !message.getUser().getUsername().equals("") ?
                     "No se han encontrado resultados" : "Por favor, escribe el nombre de usuario a filtrar");
         }
+    }
+
+    private MouseAdapter popupAction(int index) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                postTemplate[index].getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
+            }
+        };
     }
 
     private void setActions() {
