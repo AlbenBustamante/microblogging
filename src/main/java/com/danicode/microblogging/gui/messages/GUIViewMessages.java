@@ -53,13 +53,6 @@ public class GUIViewMessages extends GUIDialog {
         this.northPane.add(this.cbSearchType);
         this.northPane.add(this.bSearch);
 
-        JTextField[] jtf = new JTextField[100];
-        /* Center Pane */
-        for (int i = 0; i < jtf.length; i ++) {
-            jtf[i] = new JTextField(30);
-            this.centerPane.add(jtf[i]);
-        }
-
         /* South Pane */
         this.southPane.add(this.bExit);
 
@@ -87,5 +80,9 @@ public class GUIViewMessages extends GUIDialog {
     public JComboBox<String> getCbSearchType() { return this.cbSearchType; }
 
     public JButton getBSearch() { return this.bSearch; }
+
+    public JButton getBExit() { return this.bExit; }
+
+    public JPanel getCenterPane() { return this.centerPane; }
 
 }
