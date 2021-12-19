@@ -6,15 +6,19 @@ import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.services.MessageService;
 
+import java.util.List;
+
 public class ViewMessagesController {
     private ViewPostTemplate postTemplate;
     private final GUIViewMessages messagesTemplate;
     private final MessageService service;
+    private List<Message> messages;
 
     public ViewMessagesController() {
         this.postTemplate = new ViewPostTemplate();
         this.messagesTemplate = new GUIViewMessages(null);
         this.service = new MessageService();
+        this.messages = this.service.getMessages();
         this.init();
     }
 
@@ -27,11 +31,21 @@ public class ViewMessagesController {
     }
 
     private void loadMainData() {
-        var messages = this.service.getMessages();
-        messages.forEach(message -> {
-             this.setData(message);
-             this.messagesTemplate.getCenterPane().add(this.postTemplate);
-        });
+        var size = this.messages.size();
+
+        if (size <= 10) {
+            this.messages.forEach(message -> {
+                this.setData(message);
+                this.messagesTemplate.getCenterPane().add(this.postTemplate);
+            });
+        }
+        else {
+            for (int i = 0; i < 10; i ++) {
+                var message = this.messages.get(i);
+                this.setData(message);
+                this.messagesTemplate.getCenterPane().add(this.postTemplate);
+            }
+        }
     }
 
     private void nextPage() { }
