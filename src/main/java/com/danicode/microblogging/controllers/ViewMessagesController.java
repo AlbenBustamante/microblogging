@@ -60,17 +60,32 @@ public class ViewMessagesController {
         }
     }
 
+    private void changePage() {
+        var elements = (this.currentPage - 1) * 10;
+
+        for (int i = elements, j = 0; j < 10; i ++, j ++) {
+            try {
+                this.setData(j, this.messages.get(i));
+                this.postTemplate[j].setVisible(true);
+            } catch (IndexOutOfBoundsException ex) {
+                this.postTemplate[j].setVisible(false);
+            }
+        }
+
+        this.resetLabel();
+    }
+
     private void nextPage() {
         if (this.currentPage < this.totalPages) {
-            this.currentPage++;
-            this.resetLabel();
+            this.currentPage ++;
+            this.changePage();
         }
     }
 
     private void previousPage() {
         if (this.currentPage > 1) {
-            this.currentPage--;
-            this.resetLabel();
+            this.currentPage --;
+            this.changePage();
         }
     }
 
