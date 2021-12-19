@@ -6,13 +6,24 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ViewPostTemplate extends JPanel {
+    private JPopupMenu popupMenu;
     private JLabel lFullName, lUsername, lDateTime;
     private JTextArea taMessage;
     private JScrollPane spMessage;
     private IGridBagLayout gbc;
+    private final JMenuItem[] menuItems = new JMenuItem[3];
 
     public ViewPostTemplate() {
         this.init();
+    }
+
+    private void createPopupMenu() {
+        this.popupMenu = new JPopupMenu();
+        String[] titles = {"Ver perfil", "Editar mensaje", "Eliminar mensaje"};
+        for (int i = 0; i < this.menuItems.length; i ++) {
+            this.menuItems[i] = new JMenuItem(titles[i]);
+            this.popupMenu.add(this.menuItems[i]);
+        }
     }
 
     private void createLabels() {
@@ -61,6 +72,7 @@ public class ViewPostTemplate extends JPanel {
 
     private void init() {
         this.setPreferredSize(new Dimension(500, 240));
+        this.createPopupMenu();
         this.createLabels();
         this.createMessageArea();
         this.initLayout();
@@ -74,4 +86,12 @@ public class ViewPostTemplate extends JPanel {
     public JLabel getLDateTime() { return this.lDateTime; }
 
     public JTextArea getTaMessage() { return this.taMessage; }
+
+    public JPopupMenu getPopupMenu() { return this.popupMenu; }
+
+    public JMenuItem getMenuViewProfile() { return this.menuItems[0]; }
+
+    public JMenuItem getMenuEditMessage() { return this.menuItems[1]; }
+
+    public JMenuItem getMenuDeleteMessages() { return this.menuItems[2]; }
 }
