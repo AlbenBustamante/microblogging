@@ -1,5 +1,6 @@
 package com.danicode.microblogging.services;
 
+import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.model.dao.implementations.DAOMessageImpl;
 import com.danicode.microblogging.model.dao.templates.DAOMessage;
 import com.danicode.microblogging.model.domain.Message;
@@ -37,14 +38,26 @@ public class MessageService {
         return isCreated;
     }
 
-    public List<Message> getMessages() {
+    /**
+     * Mediante este método, puedes obtener una lista de mensajes según lo que requieras.
+     * @param filter Usa las constantes de {@code BlogConstants} para obtener el listado deseado.
+     * @param message Si el filtro es distinto de {@code LIST_MESSAGES}, puede ser {@code null}.
+     *                En cambio, si es por usuario, con sólo indicar el mensaje es suficiente.
+     * */
+    public List<Message> getMessages(int filter, Message message) {
         List<Message> messages = null;
         try {
             this.conn = getConnection();
             this.conn.setAutoCommit(false);
             this.messageDao = new DAOMessageImpl(this.conn);
 
-            messages = this.messageDao.list();
+            if (filter == BlogConstants.LIST_MESSAGES) {
+                messages = this.messageDao.list();
+            } else if (filter == BlogConstants.LIST_USER_MESSAGES) {
+                messages = this.messageDao.findByUsername(message.getUser().getUsername());
+            } else if (filter == BlogConstants.LIST_BY_MESSAGE) {
+                messages = this.messageDao.findByMessage(message.getMessage());
+            }
 
             this.conn.commit();
             this.conn.close();
