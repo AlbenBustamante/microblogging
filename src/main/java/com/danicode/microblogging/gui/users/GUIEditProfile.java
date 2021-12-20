@@ -74,8 +74,8 @@ public class GUIEditProfile extends GUIDialog {
                 1.0, 0, GridBagConstraints.HORIZONTAL, this.tfLastName);
         this.gbc.addFinalSpaces(WIDTH, 2);
 
-        this.southPane.add(this.bApply);
         this.southPane.add(this.bAccept);
+        this.southPane.add(this.bApply);
         this.southPane.add(this.bCancel);
         this.southPane.add(new JLabel("    "));
 
@@ -104,4 +104,20 @@ public class GUIEditProfile extends GUIDialog {
         this.setLayouts();
         this.design();
     }
+
+    public JLabel getLUsername() { return this.lUsername; }
+
+    public JTextField getTfName() { return this.tfName; }
+
+    public JTextField getTfLastName() { return this.tfLastName; }
+
+    public JTextField getTfEmail() { return this.tfEmail; }
+
+    public JPasswordField getPfPassword() { return this.pfPassword; }
+
+    public JButton getBAccept() { return this.bAccept; }
+
+    public JButton getBApply() { return this.bApply; }
+
+    public JButton getBCancel() { return this.bCancel; }
 }
