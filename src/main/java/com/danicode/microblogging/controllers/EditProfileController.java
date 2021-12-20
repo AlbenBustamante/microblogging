@@ -38,27 +38,23 @@ public class EditProfileController {
     private void apply() {
         this.setData();
         var isBlank = this.name.equals("") || this.lastName.equals("") || this.email.equals("") || this.password.equals("");
+        var message = "";
 
         if (!isBlank) {
             var newUser = new User(this.user.getIdUser(), this.name, this.lastName, email, this.user.getUsername(), this.password);
-            var message = this.service.updateUser(newUser) ? "Usuario actualizado correctamente" : "Algo ha ocurrido mal";
-            JOptionPane.showMessageDialog(null, message);
+            message = this.service.updateUser(newUser) ? "Usuario actualizado correctamente" : "Algo ha ocurrido mal";
         }
         else {
-            JOptionPane.showMessageDialog(null, "Por favor, llena todos los campos");
+            message = "Por favor, llena todos los campos";
         }
-    }
 
-    private void accept() {
-        this.apply();
-        this.template.dispose();
+        JOptionPane.showMessageDialog(null, message);
     }
 
     private void setActions() {
-        this.setActions(e ->
-                this.apply(), this.template.getTfName(), this.template.getTfLastName(), this.template.getPfPassword());
-        this.template.getBApply().addActionListener(e -> this.apply());
-        this.template.getBAccept().addActionListener(e -> this.accept());
+        this.setActions(e -> this.apply(), this.template.getTfName(), this.template.getTfLastName(),
+                this.template.getTfEmail(), this.template.getPfPassword());
+        this.template.getBAccept().addActionListener(e -> this.apply());
         this.template.getBCancel().addActionListener(e -> this.template.dispose());
     }
 

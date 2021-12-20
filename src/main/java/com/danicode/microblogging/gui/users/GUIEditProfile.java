@@ -37,7 +37,7 @@ public class GUIEditProfile extends GUIDialog {
 
     private void createButtons() {
         this.bAccept = new JButton("Aceptar");
-        this.bCancel = new JButton("Cancelar");
+        this.bCancel = new JButton("Volver");
     }
 
     private void createPanels() {
