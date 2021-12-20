@@ -12,7 +12,7 @@ public class EditProfileController {
     private final GUIEditProfile template;
     private final UserService service;
     private final User user;
-    private String name, lastName, password;
+    private String name, lastName, email, password;
 
     public EditProfileController(JFrame owner, User user) {
         this.template = new GUIEditProfile(owner);
@@ -25,20 +25,22 @@ public class EditProfileController {
         this.template.getLUsername().setText("@" + this.user.getUsername() + " #" + this.user.getIdUser());
         this.template.getTfName().setText(this.user.getName());
         this.template.getTfLastName().setText(this.user.getLastName());
+        this.template.getTfEmail().setText(this.user.getEmail());
     }
 
     private void setData() {
         this.name = this.template.getTfName().getText().strip();
         this.lastName = this.template.getTfLastName().getText().strip();
+        this.email = this.template.getTfEmail().getText().strip();
         this.password = new String(this.template.getPfPassword().getPassword());
     }
 
     private void apply() {
         this.setData();
-        var isBlank = this.name.equals("") || this.lastName.equals("") || this.password.equals("");
+        var isBlank = this.name.equals("") || this.lastName.equals("") || this.email.equals("") || this.password.equals("");
 
         if (!isBlank) {
-            var newUser = new User(this.name, this.lastName, null, this.user.getUsername(), this.password);
+            var newUser = new User(this.user.getIdUser(), this.name, this.lastName, email, this.user.getUsername(), this.password);
             var message = this.service.updateUser(newUser) ? "Usuario actualizado correctamente" : "Algo ha ocurrido mal";
             JOptionPane.showMessageDialog(null, message);
         }
