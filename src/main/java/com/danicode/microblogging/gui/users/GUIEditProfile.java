@@ -10,7 +10,7 @@ public class GUIEditProfile extends GUIDialog {
     private JLabel lName, lLastName, lEmail, lPassword, lUsername;
     private JTextField tfName, tfLastName, tfEmail;
     private JPasswordField pfPassword;
-    private JButton bAccept, bCancel, bApply;
+    private JButton bAccept, bCancel;
     private JPanel northPane, centerPane, southPane;
     private IGridBagLayout gbc;
     private static final int WIDTH = 3;
@@ -38,7 +38,6 @@ public class GUIEditProfile extends GUIDialog {
     private void createButtons() {
         this.bAccept = new JButton("Aceptar");
         this.bCancel = new JButton("Cancelar");
-        this.bApply = new JButton("Aplicar");
     }
 
     private void createPanels() {
@@ -75,7 +74,6 @@ public class GUIEditProfile extends GUIDialog {
         this.gbc.addFinalSpaces(WIDTH, 2);
 
         this.southPane.add(this.bAccept);
-        this.southPane.add(this.bApply);
         this.southPane.add(this.bCancel);
         this.southPane.add(new JLabel("    "));
 
@@ -116,8 +114,6 @@ public class GUIEditProfile extends GUIDialog {
     public JPasswordField getPfPassword() { return this.pfPassword; }
 
     public JButton getBAccept() { return this.bAccept; }
-
-    public JButton getBApply() { return this.bApply; }
 
     public JButton getBCancel() { return this.bCancel; }
 }
