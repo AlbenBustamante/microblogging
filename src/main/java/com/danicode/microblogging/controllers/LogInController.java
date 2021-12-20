@@ -50,6 +50,8 @@ public class LogInController {
                 JOptionPane.showMessageDialog(null,
                         "¡Bienvenido " + this.userService.getUserLogged().getUsername() + "!",
                         "Sesión abierta", JOptionPane.INFORMATION_MESSAGE);
+                new MainMenuController();
+                this.logIn.dispose();
             }
             else {
                 JOptionPane.showMessageDialog(null, "Verifica los datos nuevamente",
