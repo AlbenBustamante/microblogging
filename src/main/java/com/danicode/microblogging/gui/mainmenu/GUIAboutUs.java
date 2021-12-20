@@ -17,7 +17,7 @@ public class GUIAboutUs extends GUIDialog {
     private static final String LINKEDIN_URL = "https://www.linkedin.com/in/alben-bustamante-699102167/";
 
     public GUIAboutUs(JFrame owner) {
-        super(owner, 500, 460, "Acerca de", true, true, new BorderLayout());
+        super(owner, 500, 470, "Acerca de", true, true, new BorderLayout());
     }
 
     private JButton createHyperButton(String text, String url) {
@@ -69,15 +69,16 @@ public class GUIAboutUs extends GUIDialog {
     }
 
     private void createAreaText() {
-        var taAbout = new JTextArea(
+        var taAbout = new JTextArea("" +
                 "\nEs un software básico basado en la web de Twitter.\n\n" +
                 "De inicio te habrás dado cuenta que es necesario registrarse, puedes crearte más de una" +
-                "cuenta (preferiblemente con correos y contraseñas ficticias) y publicar mensajes cortos," +
+                "cuenta (preferiblemente con correos y contraseñas ficticias) y publicar mensajes cortos, " +
                 "de máximo 140 caracteres, lo cual fue por lo que se caracterizó Twitter en sus inicios.\n\n" +
-                "Puedes ver los mensajes publicados por otros usuarios, así como ver el perfil de cada usuario" +
+                "Puedes ver los mensajes publicados por otros usuarios, así como ver el perfil de cada usuario " +
                 "y su información." +
                 "\n\nSi te ha gustado el programa, puedes seguirme en GitHub y ver mi perfil de LinkedIn" +
-                "\n\nIgualmente, si tienes alguna sugerencia, será bien recibida.");
+                "\n\nIgualmente, si tienes alguna sugerencia, será bien recibida." +
+                "\n\n¡Gracias por su apoyo!");
 
         taAbout.setWrapStyleWord(true);
         taAbout.setLineWrap(true);
@@ -86,7 +87,7 @@ public class GUIAboutUs extends GUIDialog {
 
         this.spAbout = new JScrollPane(taAbout);
         this.spAbout.setBorder(null);
-        this.spAbout.setPreferredSize(new Dimension(470, 260));
+        this.spAbout.setPreferredSize(new Dimension(470, 270));
     }
 
     private void design() {

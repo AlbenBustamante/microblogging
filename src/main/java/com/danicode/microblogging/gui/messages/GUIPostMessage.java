@@ -69,7 +69,7 @@ public class GUIPostMessage extends GUIDialog implements BlogConstants {
 
     @Override
     protected void close() {
-        System.exit(0);
+        this.dispose();
     }
 
     @Override

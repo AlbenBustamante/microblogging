@@ -20,8 +20,8 @@ public class ViewMessagesController {
     private final MessageService service;
     private final ViewPostTemplate[] postTemplate = new ViewPostTemplate[10];
 
-    public ViewMessagesController() {
-        this.messagesTemplate = new GUIViewMessages(null);
+    public ViewMessagesController(JFrame owner) {
+        this.messagesTemplate = new GUIViewMessages(owner);
         this.service = new MessageService();
         this.messages = this.service.getMessages(BlogConstants.LIST_MESSAGES, null);
         this.init();

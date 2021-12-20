@@ -1,9 +1,7 @@
 package com.danicode.microblogging.controllers;
 
-import com.danicode.microblogging.constants.BlogConstants;
 import com.danicode.microblogging.gui.messages.GUIPostMessage;
 import com.danicode.microblogging.model.domain.Message;
-import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.MessageService;
 import com.danicode.microblogging.services.UserService;
 
@@ -13,12 +11,12 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class PostMessageController implements DocumentListener {
-    private GUIPostMessage postMessage;
-    private MessageService messageService;
-    private UserService userService;
+    private final GUIPostMessage postMessage;
+    private final MessageService messageService;
+    private final UserService userService;
 
-    public PostMessageController() {
-        this.postMessage = new GUIPostMessage(null);
+    public PostMessageController(JFrame owner) {
+        this.postMessage = new GUIPostMessage(owner);
         this.messageService = new MessageService();
         this.userService = new UserService();
         this.init();
