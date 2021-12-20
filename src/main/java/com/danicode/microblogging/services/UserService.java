@@ -134,6 +134,30 @@ public class UserService {
         );
     }
 
+    public boolean updateUser(User user) {
+        var updated = false;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.userDao = new DAOUserImpl(this.conn);
+
+            updated = this.userDao.update(user) != 0;
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return updated;
+    }
+
     public User getUserLogged() { return userLogged; }
 
     public void resetUserLogged() { userLogged = null; }
