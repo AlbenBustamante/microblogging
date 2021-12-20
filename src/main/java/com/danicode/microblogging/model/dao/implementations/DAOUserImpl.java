@@ -15,7 +15,7 @@ public class DAOUserImpl implements DAOUser {
     private static final String
         SQL_INSERT = "INSERT INTO users(name, last_name, email, username, password) VALUES(?, ?, ?, ?, ?);",
         SQL_SELECT = "SELECT * FROM users;",
-        SQL_UPDATE = "UPDATE users SET name=?, last_name=?, email=?, password=? WHERE user_id=?;",
+        SQL_UPDATE = "UPDATE users SET name=?, last_name=?, password=? WHERE user_id=?;",
         SQL_DELETE = "DELETE FROM users WHERE user_id=?;",
         SQL_SELECT_BY_ID = "SELECT name, last_name, email, username, password FROM users WHERE user_id=?;",
         SQL_SELECT_BY_USERNAME = "SELECT * FROM users WHERE UPPER(username)=UPPER(?);",
@@ -67,9 +67,8 @@ public class DAOUserImpl implements DAOUser {
         var stmt = conn.prepareStatement(SQL_UPDATE);
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getLastName());
-        stmt.setString(3, user.getEmail());
-        stmt.setString(4, user.getPassword());
-        stmt.setInt(5, user.getIdUser());
+        stmt.setString(3, user.getPassword());
+        stmt.setInt(4, user.getIdUser());
 
         var rowsUpdated = stmt.executeUpdate();
         close(this.externConnection, conn, stmt);
