@@ -120,9 +120,3 @@ public class GUIAboutUs extends GUIDialog {
         this.design();
     }
 }
-
-class test {
-    public static void main(String[] args) {
-        new GUIAboutUs(null);
-    }
-}
