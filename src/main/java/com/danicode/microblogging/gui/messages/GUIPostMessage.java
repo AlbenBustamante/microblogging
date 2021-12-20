@@ -88,4 +88,6 @@ public class GUIPostMessage extends GUIDialog implements BlogConstants {
     public JButton getBExit() { return this.bExit; }
 
     public JLabel getLCharacters() { return this.lCharacters; }
+
+    public JLabel getLPost() { return this.lPost; }
 }
