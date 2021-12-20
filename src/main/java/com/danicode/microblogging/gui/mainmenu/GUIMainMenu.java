@@ -11,7 +11,7 @@ public class GUIMainMenu extends GUIWindow {
     private JMenuItem mFileLogOut, mFileExit, mProfileEdit, mProfileVisualize, mPostingSurf, mPostingPost, mAboutUs;
 
     public GUIMainMenu() {
-        super(380, 240, "Microblogging 1.0", true, new FlowLayout(FlowLayout.CENTER, 0, 80));
+        super(380, 240, "Microblogging 1.0", true, new BorderLayout());
     }
 
     private void createMenu() {
@@ -55,8 +55,8 @@ public class GUIMainMenu extends GUIWindow {
 
     private void createLabel() {
         final var welcome = "¡Bienvenido a Microblogging 1.0!";
-        final var lWelcome = new JLabel(welcome);
-        this.getContentPane().add(lWelcome);
+        final var lWelcome = new JLabel(welcome, SwingConstants.CENTER);
+        this.getContentPane().add(lWelcome, BorderLayout.CENTER);
     }
 
     @Override
