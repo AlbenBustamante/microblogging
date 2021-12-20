@@ -49,10 +49,17 @@ public class EditProfileController {
         }
     }
 
+    private void accept() {
+        this.apply();
+        this.template.dispose();
+    }
+
     private void setActions() {
         this.setActions(e ->
                 this.apply(), this.template.getTfName(), this.template.getTfLastName(), this.template.getPfPassword());
         this.template.getBApply().addActionListener(e -> this.apply());
+        this.template.getBAccept().addActionListener(e -> this.accept());
+        this.template.getBCancel().addActionListener(e -> this.template.dispose());
     }
 
     private void setActions(ActionListener event, JTextField... fields) {
