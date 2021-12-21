@@ -158,14 +158,14 @@ public class MessageService {
         return deleted;
     }
 
-    public boolean deleteUserMessages(int idUser) {
+    public boolean deleteUserMessages() {
         var deleted = false;
         try {
             this.conn = getConnection();
             this.conn.setAutoCommit(false);
             this.messageDao = new DAOMessageImpl(this.conn);
 
-            deleted = this.messageDao.deleteUserMessages(idUser) != 0;
+            deleted = this.messageDao.deleteUserMessages(this.userService.getUserLogged().getIdUser()) != 0;
 
             this.conn.commit();
             this.conn.close();
