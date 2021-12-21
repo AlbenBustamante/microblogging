@@ -152,7 +152,7 @@ public class ViewMessagesController {
     private void viewProfile(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@");
         var profile = this.service.getAuthor(username[1]);
-        new ViewProfileController(profile);
+        new ViewProfileController(this.messagesTemplate, profile);
     }
 
     private boolean isUserLoggedMessage(int index) {

@@ -22,7 +22,7 @@ public class MainMenuController {
 
     private void setActions() {
         this.template.getAboutUs().addActionListener(e -> new GUIAboutUs(this.template));
-        this.template.getProfileVisualize().addActionListener(e -> new ViewProfileController(this.userService.getUserLogged()));
+        this.template.getProfileVisualize().addActionListener(e -> new ViewProfileController(this.template, this.userService.getUserLogged()));
         this.template.getFileExit().addActionListener(e -> System.exit(0));
         this.template.getPostingPost().addActionListener(e -> new PostEditMessageController(this.template));
         this.template.getPostingSurf().addActionListener(e -> new ViewMessagesController(this.template));

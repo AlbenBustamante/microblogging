@@ -12,7 +12,7 @@ public class GUIViewProfile extends GUIDialog {
     private JPanel centerPane, southPane;
     private IGridBagLayout gbc;
 
-    public GUIViewProfile(JFrame owner) {
+    public GUIViewProfile(Window owner) {
         super(owner, 474, 304, "Perfil de Usuario", false, false, new BorderLayout());
     }
 
