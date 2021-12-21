@@ -67,6 +67,11 @@ public class ViewMessagesController {
 
     private void refreshPage() {
         this.setTotalPages();
+
+        if (this.currentPage > this.totalPages) {
+            this.currentPage = 1;
+        }
+
         var elements = (this.currentPage - 1) * 10;
 
         for (int i = elements, j = 0; j < 10; i ++, j ++) {
