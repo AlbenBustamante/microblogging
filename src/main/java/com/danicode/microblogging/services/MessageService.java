@@ -14,6 +14,11 @@ import static com.danicode.microblogging.services.ConnectionService.*;
 public class MessageService {
     private Connection conn;
     private DAOMessage messageDao;
+    private final UserService userService;
+
+    public MessageService() {
+        this.userService = new UserService();
+    }
 
     public boolean createMessage(Message message) {
         var isCreated = false;
@@ -54,10 +59,12 @@ public class MessageService {
 
             if (filter == BlogConstants.LIST_MESSAGES) {
                 messages = this.messageDao.list();
-            } else if (filter == BlogConstants.LIST_USER_MESSAGES || filter == BlogConstants.LIST_MY_MESSAGES) {
+            } else if (filter == BlogConstants.LIST_USER_MESSAGES) {
                 messages = this.messageDao.findByUsername(message.getUser().getUsername());
             } else if (filter == BlogConstants.LIST_BY_MESSAGE) {
                 messages = this.messageDao.findByMessage(message.getMessage());
+            } else if (filter == BlogConstants.LIST_MY_MESSAGES) {
+                messages = this.messageDao.findByUsername(this.userService.getUserLogged().getUsername());
             }
 
             this.conn.commit();
@@ -76,8 +83,7 @@ public class MessageService {
     }
 
     public User getAuthor(String username) {
-        var service = new UserService();
-        return service.getUser(username);
+        return this.userService.getUser(username);
     }
 
     public boolean editMessage(Message message) {
