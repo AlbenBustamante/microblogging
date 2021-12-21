@@ -79,4 +79,28 @@ public class MessageService {
         var service = new UserService();
         return service.getUser(username);
     }
+
+    public boolean editMessage(Message message) {
+        var edited = false;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.messageDao = new DAOMessageImpl(this.conn);
+
+            edited = this.messageDao.update(message) != 0;
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return edited;
+    }
 }
