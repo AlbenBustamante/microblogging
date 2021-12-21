@@ -158,6 +158,30 @@ public class UserService {
         return updated;
     }
 
+    public boolean deleteUser(int idUser) {
+        var deleted = false;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.userDao = new DAOUserImpl(this.conn);
+
+            deleted = this.userDao.delete(idUser) != 0;
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return deleted;
+    }
+
     public User getUserLogged() { return userLogged; }
 
     public void resetUserLogged() { userLogged = null; }
