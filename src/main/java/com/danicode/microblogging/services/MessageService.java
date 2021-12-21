@@ -103,4 +103,28 @@ public class MessageService {
         }
         return edited;
     }
+
+    public Message getMessage(String dateTime) {
+        Message message = null;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.messageDao = new DAOMessageImpl(this.conn);
+
+            message = this.messageDao.findByDateTime(dateTime);
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return message;
+    }
 }
