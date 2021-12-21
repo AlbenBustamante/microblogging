@@ -9,4 +9,6 @@ public interface DAOMessage extends CRUD<Message> {
     List<Message> findByUsername(String username) throws Exception;
 
     List<Message> findByMessage(String message) throws Exception;
+
+    Message findByDateTime(String dateTime) throws Exception;
 }
