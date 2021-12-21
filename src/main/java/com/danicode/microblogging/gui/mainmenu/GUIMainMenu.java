@@ -8,7 +8,8 @@ import java.awt.*;
 public class GUIMainMenu extends GUIWindow {
     private JMenuBar menuBar;
     private JMenu menuFile, menuProfile, menuPosting, menuAbout;
-    private JMenuItem mFileLogOut, mFileExit, mProfileEdit, mProfileVisualize, mPostingSurf, mPostingPost, mAboutUs;
+    private JMenuItem mFileLogOut, mFileExit, mProfileEdit, mProfileVisualize, mPostingDelete, mPostingSurf,
+            mPostingPost, mAboutUs;
 
     public GUIMainMenu() {
         super(380, 240, "Microblogging 1.0", true, new BorderLayout());
@@ -29,6 +30,7 @@ public class GUIMainMenu extends GUIWindow {
         this.mProfileVisualize = new JMenuItem("Visualizar");
         this.mPostingSurf = new JMenuItem("Navegar");
         this.mPostingPost = new JMenuItem("Publicar");
+        this.mPostingDelete = new JMenuItem("Borrar mis posts");
         this.mAboutUs = new JMenuItem("microblogging");
     }
 
@@ -42,6 +44,7 @@ public class GUIMainMenu extends GUIWindow {
         //Menu Posting
         this.menuPosting.add(this.mPostingSurf);
         this.menuPosting.add(this.mPostingPost);
+        this.menuPosting.add(this.mPostingDelete);
         //Menu About
         this.menuAbout.add(this.mAboutUs);
     }
@@ -85,6 +88,8 @@ public class GUIMainMenu extends GUIWindow {
     public JMenuItem getPostingSurf() { return this.mPostingSurf; }
 
     public JMenuItem getPostingPost() { return this.mPostingPost; }
+
+    public JMenuItem getPostingDelete() { return this.mPostingDelete; }
 
     public JMenuItem getAboutUs() { return this.mAboutUs; }
 }
