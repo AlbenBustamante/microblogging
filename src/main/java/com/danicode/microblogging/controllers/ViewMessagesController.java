@@ -6,6 +6,7 @@ import com.danicode.microblogging.gui.messages.ViewPostTemplate;
 import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.model.domain.User;
 import com.danicode.microblogging.services.MessageService;
+import com.danicode.microblogging.services.UserService;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -17,13 +18,15 @@ public class ViewMessagesController {
     private List<Message> messages;
     private JLabel lPageIndex;
     private final GUIViewMessages messagesTemplate;
-    private final MessageService service;
+    private final MessageService messageService;
+    private final User userLogged;
     private final ViewPostTemplate[] postTemplate = new ViewPostTemplate[10];
 
     public ViewMessagesController(JFrame owner) {
         this.messagesTemplate = new GUIViewMessages(owner);
-        this.service = new MessageService();
-        this.messages = this.service.getMessages(BlogConstants.LIST_MESSAGES, null);
+        this.messageService = new MessageService();
+        this.userLogged = new UserService().getUserLogged();
+        this.messages = this.messageService.getMessages(BlogConstants.LIST_MESSAGES, null);
         this.init();
     }
 
@@ -127,7 +130,7 @@ public class ViewMessagesController {
             message.setMessage(text);
         }
 
-        this.messages = service.getMessages(filter, message);
+        this.messages = messageService.getMessages(filter, message);
 
         if (!this.messages.isEmpty()) {
             this.refreshPage();
@@ -148,12 +151,20 @@ public class ViewMessagesController {
 
     private void viewProfile(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@");
-        var profile = this.service.getAuthor(username[1]);
+        var profile = this.messageService.getAuthor(username[1]);
         new ViewProfileController(profile);
     }
 
     private void editMessage(int index) {
-        System.out.println("editar mensaje " + index);
+        var username = this.postTemplate[index].getLUsername().getText().split("@")[1];
+        if (this.userLogged.getUsername().equals(username)) {
+            var dateTime = this.postTemplate[index].getLDateTime().getText();
+            var messageToEdit = this.messageService.getMessage(dateTime);
+            new PostEditMessageController(this.messagesTemplate, messageToEdit);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Sólo puedes editar tus propios mensajes");
+        }
     }
 
     private void deleteMessage(int index) {

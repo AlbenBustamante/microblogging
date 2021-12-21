@@ -22,13 +22,13 @@ public class PostEditMessageController implements DocumentListener {
         this.userService = new UserService();
     }
 
-    public PostEditMessageController(JFrame owner) {
+    public PostEditMessageController(Window owner) {
         this();
         this.postMessage = new GUIPostMessage(owner);
         this.init();
     }
 
-    public PostEditMessageController(JFrame owner, Message messageToUpdate) {
+    public PostEditMessageController(Window owner, Message messageToUpdate) {
         this();
         this.messageToUpdate = messageToUpdate;
         this.postMessage = new GUIEditMessage(owner, messageToUpdate);

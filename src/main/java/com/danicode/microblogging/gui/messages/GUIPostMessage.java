@@ -13,7 +13,7 @@ public class GUIPostMessage extends GUIDialog implements BlogConstants {
     private JButton bPost, bExit;
     private JPanel northPane, centerPane, southPane;
 
-    public GUIPostMessage(JFrame owner) {
+    public GUIPostMessage(Window owner) {
         super(owner, 500, 320, "Mensaje a publicar", false, false, new BorderLayout());
     }
 
