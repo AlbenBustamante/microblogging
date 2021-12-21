@@ -13,10 +13,12 @@ public class GUIEditProfile extends GUIDialog {
     private JButton bAccept, bCancel, bDelete;
     private JPanel northPane, centerPane, southPane;
     private IGridBagLayout gbc;
+    private JFrame owner;
     private static final int WIDTH = 3;
 
     public GUIEditProfile(JFrame owner) {
         super(owner, 420, 500, "Editar y/o actualizar información", false, false, new BorderLayout());
+        this.owner = owner;
     }
 
     private void createLabels() {
@@ -118,4 +120,6 @@ public class GUIEditProfile extends GUIDialog {
     public JButton getBCancel() { return this.bCancel; }
 
     public JButton getBDelete() { return this.bDelete; }
+
+    public JFrame getOwner() { return this.owner; }
 }

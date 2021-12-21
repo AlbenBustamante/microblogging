@@ -51,9 +51,28 @@ public class EditProfileController {
         JOptionPane.showMessageDialog(null, message);
     }
 
+    private void delete() {
+        var option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas borrar tu perfil?\n" +
+                        "@" + this.user.getUsername(), "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (option == JOptionPane.YES_OPTION) {
+            var deleted = this.service.deleteUser(this.user.getIdUser());
+            var message = deleted ? "¡Usuario borrado correctamente!" : "Algo ha ocurrido mal";
+            JOptionPane.showMessageDialog(null, message);
+
+            if (deleted) {
+                this.service.resetUserLogged();
+                new LogInController();
+                this.template.getOwner().dispose();
+                this.template.dispose();
+            }
+        }
+    }
+
     private void setActions() {
         this.setActions(e -> this.apply(), this.template.getTfName(), this.template.getTfLastName(),
                 this.template.getTfEmail(), this.template.getPfPassword());
+        this.template.getBDelete().addActionListener(e -> this.delete());
         this.template.getBAccept().addActionListener(e -> this.apply());
         this.template.getBCancel().addActionListener(e -> this.template.dispose());
     }
