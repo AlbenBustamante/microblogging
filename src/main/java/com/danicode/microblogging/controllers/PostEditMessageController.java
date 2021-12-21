@@ -1,5 +1,6 @@
 package com.danicode.microblogging.controllers;
 
+import com.danicode.microblogging.gui.messages.GUIEditMessage;
 import com.danicode.microblogging.gui.messages.GUIPostMessage;
 import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.services.MessageService;
@@ -10,35 +11,67 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class PostMessageController implements DocumentListener {
-    private final GUIPostMessage postMessage;
+public class PostEditMessageController implements DocumentListener {
     private final MessageService messageService;
     private final UserService userService;
+    private GUIPostMessage postMessage;
+    private Message messageToUpdate;
 
-    public PostMessageController(JFrame owner) {
-        this.postMessage = new GUIPostMessage(owner);
+    private PostEditMessageController() {
         this.messageService = new MessageService();
         this.userService = new UserService();
+    }
+
+    public PostEditMessageController(JFrame owner) {
+        this();
+        this.postMessage = new GUIPostMessage(owner);
         this.init();
+    }
+
+    public PostEditMessageController(JFrame owner, Message messageToUpdate) {
+        this();
+        this.messageToUpdate = messageToUpdate;
+        this.postMessage = new GUIEditMessage(owner, messageToUpdate);
+        this.init();
+    }
+
+    private void confirm(String message) {
+        this.postMessage.getJPost().setText("");
+
+        JOptionPane.showMessageDialog(null, "¡"  + message + "!");
+
+        if (this.messageToUpdate == null) {
+            var option = JOptionPane.showConfirmDialog(null, "¿Deseas publicar otro?",
+                    "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (option != JOptionPane.YES_OPTION) {
+                this.postMessage.dispose();
+            }
+        }
+        else {
+            this.postMessage.dispose();
+        }
+    }
+
+    private void checkAction(boolean action, String message) {
+        if (action) {
+            this.confirm(message);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Algo salió mal");
+        }
     }
 
     private void postMessage() {
         var messageText = this.postMessage.getJPost().getText().strip();
+
         if (messageText.length() >= 1 && messageText.length() <= 140) {
             var message = new Message(this.userService.getUserLogged(), messageText);
-            if (this.messageService.createMessage(message)) {
-                this.postMessage.getJPost().setText("");
-                JOptionPane.showMessageDialog(null, "¡Mensaje publicado con éxito!");
-                var option = JOptionPane.showConfirmDialog(null, "¿Deseas publicar otro?",
-                        "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            var edit = this.messageToUpdate != null;
+            if (edit) message.setIdMessage(this.messageToUpdate.getIdMessage());
 
-                if (option != 0) {
-                    this.postMessage.dispose();
-                }
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Algo salió mal");
-            }
+            this.checkAction(edit ? this.messageService.editMessage(message) : this.messageService.createMessage(message),
+                    edit ? "Mensaje actualizado con éxito" : "Mensaje publicado con éxito");
         }
         else {
             JOptionPane.showMessageDialog(null, "El mensaje debe tener entre 1 y 140 caracteres");

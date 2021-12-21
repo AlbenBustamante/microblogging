@@ -3,7 +3,6 @@ package com.danicode.microblogging.model.dao.implementations;
 import com.danicode.microblogging.model.dao.templates.DAOMessage;
 import com.danicode.microblogging.model.dao.templates.DAOUser;
 import com.danicode.microblogging.model.domain.Message;
-import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import static com.danicode.microblogging.services.ConnectionService.*;
 
 public class DAOMessageImpl implements DAOMessage {
     private Connection externConnection;
-    private DAOUser userDao;
+    private final DAOUser userDao;
     private static final String
         SQL_INSERT = "INSERT INTO messages(user_id_pk, date_time, message) VALUES(?, ?, ?);",
         SQL_SELECT = "SELECT message_id, user_id_pk, date_time, message FROM messages;",

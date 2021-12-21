@@ -1,10 +1,14 @@
 package com.danicode.microblogging.gui.messages;
 
+import com.danicode.microblogging.model.domain.Message;
+
 import javax.swing.*;
 
 public class GUIEditMessage extends GUIPostMessage {
-    public GUIEditMessage(JFrame owner) {
+    private final Message messageToUpdate;
+    public GUIEditMessage(JFrame owner, Message messageToUpdate) {
         super(owner);
+        this.messageToUpdate = messageToUpdate;
         this.changeTexts();
     }
 
@@ -13,5 +17,6 @@ public class GUIEditMessage extends GUIPostMessage {
                 "Escribe tu mensaje y actualízalo<br/>Máx. 140 caracteres" +
                 "</p></html>");
         this.getBPost().setText("Actualizar");
+        this.getJPost().setText(this.messageToUpdate.getMessage());
     }
 }
