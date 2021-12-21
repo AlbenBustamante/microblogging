@@ -18,15 +18,15 @@ public class ViewMessagesController {
     private List<Message> messages;
     private JLabel lPageIndex;
     private final GUIViewMessages messagesTemplate;
-    private final MessageService messageService;
+    private final MessageService service;
     private final User userLogged;
     private final ViewPostTemplate[] postTemplate = new ViewPostTemplate[10];
 
     public ViewMessagesController(JFrame owner) {
         this.messagesTemplate = new GUIViewMessages(owner);
-        this.messageService = new MessageService();
+        this.service = new MessageService();
         this.userLogged = new UserService().getUserLogged();
-        this.messages = this.messageService.getMessages(BlogConstants.LIST_MESSAGES, null);
+        this.messages = this.service.getMessages(BlogConstants.LIST_MESSAGES, null);
         this.init();
     }
 
@@ -130,7 +130,7 @@ public class ViewMessagesController {
             message.setMessage(text);
         }
 
-        this.messages = messageService.getMessages(filter, message);
+        this.messages = service.getMessages(filter, message);
 
         if (!this.messages.isEmpty()) {
             this.refreshPage();
@@ -151,40 +151,44 @@ public class ViewMessagesController {
 
     private void viewProfile(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@");
-        var profile = this.messageService.getAuthor(username[1]);
+        var profile = this.service.getAuthor(username[1]);
         new ViewProfileController(profile);
     }
 
-    private void editMessage(int index) {
+    private boolean isUserLoggedMessage(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@")[1];
-        if (this.userLogged.getUsername().equals(username)) {
+        return this.userLogged.getUsername().equals(username);
+    }
+
+    private void editMessage(int index) {
+        if (this.isUserLoggedMessage(index)) {
             var dateTime = this.postTemplate[index].getLDateTime().getText();
-            var messageToEdit = this.messageService.getMessage(dateTime);
+            var messageToEdit = this.service.getMessage(dateTime);
             new PostEditMessageController(this.messagesTemplate, messageToEdit);
         }
         else {
-            JOptionPane.showMessageDialog(null, "Sólo puedes editar tus propios mensajes");
+            JOptionPane.showMessageDialog(null, "Sólo puedes editar tus propios mensajes",
+                    this.userLogged.getUsername(), JOptionPane.WARNING_MESSAGE);
         }
     }
 
     private void deleteMessage(int index) {
-        var username = this.postTemplate[index].getLUsername().getText().split("@")[1];
-
-        if (this.userLogged.getUsername().equals(username)) {
+        if (this.isUserLoggedMessage(index)) {
             var dateTime = this.postTemplate[index].getLDateTime().getText();
-            var idMessage = this.messageService.getMessage(dateTime).getIdMessage();
+            var idMessage = this.service.getMessage(dateTime).getIdMessage();
 
             var option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar el mensaje?",
                     "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (option == JOptionPane.YES_OPTION) {
-                var confirm = this.messageService.deleteMessage(idMessage) ?
-                        "¡Mensaje eliminado exitosamente!" : "Algo ocurrió mal";
+                var confirm = this.service.deleteMessage(idMessage) ?
+                        "¡Mensaje eliminado correctamente!" : "Algo ocurrió mal";
                 JOptionPane.showMessageDialog(null, confirm);
             }
         }
         else {
-            JOptionPane.showMessageDialog(null, "Sólo puedes eliminar tus propios mensajes");
+            JOptionPane.showMessageDialog(null, "Sólo puedes eliminar tus propios mensajes",
+                    this.userLogged.getUsername(), JOptionPane.WARNING_MESSAGE);
         }
     }
 
