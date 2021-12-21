@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIViewProfile extends GUIDialog {
-    private JLabel lUserId, lFullName, lEmail, lUsername;
+    private JLabel lUserId, lFullName, lEmail, lUsername, lTotalMessages;
     private JButton bExit;
     private JPanel centerPane, southPane;
     private IGridBagLayout gbc;
@@ -21,6 +21,7 @@ public class GUIViewProfile extends GUIDialog {
         this.lFullName = new JLabel();
         this.lEmail = new JLabel();
         this.lUsername = new JLabel();
+        this.lTotalMessages = new JLabel();
     }
 
     private void createButtons() {
@@ -53,6 +54,9 @@ public class GUIViewProfile extends GUIDialog {
         this.gbc.addGBC(1, 7, 1, 1, 1.0, 0, GridBagConstraints.HORIZONTAL, this.lUsername);
         this.gbc.addFinalSpaces(WIDTH, 7);
 
+        this.gbc.addGBC(1, 9, 1, 1, 1.0, 0, GridBagConstraints.HORIZONTAL, this.lTotalMessages);
+        this.gbc.addFinalSpaces(WIDTH, 9);
+
         this.southPane.add(this.bExit);
 
         this.getContentPane().add(this.gbc.pane(), BorderLayout.CENTER);
@@ -79,6 +83,8 @@ public class GUIViewProfile extends GUIDialog {
     public JLabel getLEmail() { return this.lEmail; }
 
     public JLabel getLUsername() { return this.lUsername; }
+
+    public JLabel getlTotalMessages() { return this.lTotalMessages; }
 
     public JButton getBExit() { return this.bExit; }
 }
