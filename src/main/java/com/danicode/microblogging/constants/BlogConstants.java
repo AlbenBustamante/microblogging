@@ -2,5 +2,13 @@ package com.danicode.microblogging.constants;
 
 public interface BlogConstants {
     int POST_LENGTH = 140;
+    int LIST_MESSAGES = 0;
+    int LIST_USER_MESSAGES = 1;
+    int LIST_BY_MESSAGE = 2;
+    int LIST_MY_MESSAGES = 3;
     String CHARACTERS_REMAINING = "Caracteres restantes: ";
+    String SEARCH_MESSAGES = "Todos los Mensajes";
+    String SEARCH_BY_MESSAGE = "Por mensaje";
+    String SEARCH_MESSAGE_BY_USER = "Por usuario";
+    String SEARCH_BY_USER_LOGGED = "Mis mensajes";
 }
