@@ -10,7 +10,7 @@ public class GUIEditProfile extends GUIDialog {
     private JLabel lName, lLastName, lEmail, lPassword, lUsername;
     private JTextField tfName, tfLastName, tfEmail;
     private JPasswordField pfPassword;
-    private JButton bAccept, bCancel;
+    private JButton bAccept, bCancel, bDelete;
     private JPanel northPane, centerPane, southPane;
     private IGridBagLayout gbc;
     private static final int WIDTH = 3;
@@ -38,6 +38,7 @@ public class GUIEditProfile extends GUIDialog {
     private void createButtons() {
         this.bAccept = new JButton("Aceptar");
         this.bCancel = new JButton("Cancelar");
+        this.bDelete = new JButton("Eliminar Perfil");
     }
 
     private void createPanels() {
@@ -51,14 +52,19 @@ public class GUIEditProfile extends GUIDialog {
     private void setLayouts() {
         this.northPane.setLayout(new FlowLayout(FlowLayout.LEFT, 24, 20));
         this.centerPane.setLayout(new GridBagLayout());
-        this.southPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 8, 10));
+        this.southPane.setLayout(new FlowLayout(FlowLayout.CENTER, 6, 12));
         this.gbc = () -> this.centerPane;
+    }
+
+    private void addConstraints(int y, JLabel label, JTextField field) {
+        this.gbc.addVertical(1, y, 1, 1.0, 0, GridBagConstraints.HORIZONTAL, label,
+                1.0, 0, GridBagConstraints.HORIZONTAL, field);
+        this.gbc.addFinalSpaces(WIDTH, y + 2);
     }
 
     private void design() {
         this.northPane.add(this.lUsername);
 
-        final int WIDTH = 3;
         this.gbc.GBC.ipadx = 8;
         this.gbc.GBC.ipady = 4;
 
@@ -66,26 +72,21 @@ public class GUIEditProfile extends GUIDialog {
 
         this.addConstraints(0, this.lName, this.tfName);
         this.addConstraints(3, this.lLastName, this.tfLastName);
-        this.addConstraints(4, this.lEmail, this.tfEmail);
-        this.addConstraints(6, this.lPassword, this.pfPassword);
+        this.addConstraints(6, this.lEmail, this.tfEmail);
+        this.addConstraints(9, this.lPassword, this.pfPassword);
 
         this.gbc.addVertical(1, 2, 1, 1.0, 1.0, GridBagConstraints.HORIZONTAL, this.lLastName,
                 1.0, 0, GridBagConstraints.HORIZONTAL, this.tfLastName);
         this.gbc.addFinalSpaces(WIDTH, 2);
 
+        this.southPane.add(this.bDelete);
         this.southPane.add(this.bAccept);
         this.southPane.add(this.bCancel);
         this.southPane.add(new JLabel("    "));
 
         this.getContentPane().add(this.northPane, BorderLayout.NORTH);
-        this.getContentPane().add(this.centerPane, BorderLayout.CENTER);
+        this.getContentPane().add(this.gbc.pane(), BorderLayout.CENTER);
         this.getContentPane().add(this.southPane, BorderLayout.SOUTH);
-    }
-
-    private void addConstraints(int y, JLabel label, JTextField field) {
-        this.gbc.addVertical(1, y, 1, 1.0, 0, GridBagConstraints.HORIZONTAL, label,
-                1.0, 0, GridBagConstraints.HORIZONTAL, field);
-        this.gbc.addFinalSpaces(WIDTH, y + 2);
     }
 
     @Override
@@ -116,4 +117,6 @@ public class GUIEditProfile extends GUIDialog {
     public JButton getBAccept() { return this.bAccept; }
 
     public JButton getBCancel() { return this.bCancel; }
+
+    public JButton getBDelete() { return this.bDelete; }
 }
