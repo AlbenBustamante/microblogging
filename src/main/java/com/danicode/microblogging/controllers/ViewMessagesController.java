@@ -65,12 +65,15 @@ public class ViewMessagesController {
         }
     }
 
-    private void refreshPage() {
-        this.setTotalPages();
-
+    private void checkCurrentPage() {
         if (this.currentPage > this.totalPages) {
             this.currentPage = 1;
         }
+    }
+
+    private void refreshPage() {
+        this.setTotalPages();
+        this.checkCurrentPage();
 
         var elements = (this.currentPage - 1) * 10;
 
