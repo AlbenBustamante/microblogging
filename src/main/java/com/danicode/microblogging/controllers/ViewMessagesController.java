@@ -114,6 +114,9 @@ public class ViewMessagesController {
         else if (optionSelected.equals(BlogConstants.SEARCH_MESSAGE_BY_USER)) {
             this.search(BlogConstants.LIST_USER_MESSAGES);
         }
+        else if (optionSelected.equals(BlogConstants.SEARCH_BY_USER_LOGGED)) {
+            this.search(BlogConstants.LIST_MY_MESSAGES);
+        }
         else {
             this.search(BlogConstants.LIST_MESSAGES);
         }
@@ -125,8 +128,9 @@ public class ViewMessagesController {
 
         if (filter == BlogConstants.LIST_USER_MESSAGES) {
             message.setUser(new User("", "", "", text, ""));
-        }
-        else if (filter == BlogConstants.LIST_BY_MESSAGE) {
+        } else if (filter == BlogConstants.LIST_MY_MESSAGES) {
+            message.setUser(this.userLogged);
+        } else if (filter == BlogConstants.LIST_BY_MESSAGE) {
             message.setMessage(text);
         }
 
