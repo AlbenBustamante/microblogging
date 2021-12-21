@@ -39,7 +39,8 @@ public class GUIViewMessages extends GUIDialog {
 
     private void createComboBoxes() {
         this.cbSearchType = new JComboBox<>(new String[] {
-                BlogConstants.SEARCH_MESSAGES, BlogConstants.SEARCH_BY_MESSAGE, BlogConstants.SEARCH_MESSAGE_BY_USER
+                BlogConstants.SEARCH_MESSAGES, BlogConstants.SEARCH_BY_MESSAGE, BlogConstants.SEARCH_MESSAGE_BY_USER,
+                BlogConstants.SEARCH_BY_USER_LOGGED
         });
     }
 
