@@ -168,7 +168,24 @@ public class ViewMessagesController {
     }
 
     private void deleteMessage(int index) {
-        System.out.println("eliminar mensaje " + index);
+        var username = this.postTemplate[index].getLUsername().getText().split("@")[1];
+
+        if (this.userLogged.getUsername().equals(username)) {
+            var dateTime = this.postTemplate[index].getLDateTime().getText();
+            var idMessage = this.messageService.getMessage(dateTime).getIdMessage();
+
+            var option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar el mensaje?",
+                    "Consulta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (option == JOptionPane.YES_OPTION) {
+                var confirm = this.messageService.deleteMessage(idMessage) ?
+                        "¡Mensaje eliminado exitosamente!" : "Algo ocurrió mal";
+                JOptionPane.showMessageDialog(null, confirm);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Sólo puedes eliminar tus propios mensajes");
+        }
     }
 
     private void setActions(int index) {
