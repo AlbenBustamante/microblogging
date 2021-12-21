@@ -11,4 +11,6 @@ public interface DAOMessage extends CRUD<Message> {
     List<Message> findByMessage(String message) throws Exception;
 
     Message findByDateTime(String dateTime) throws Exception;
+
+    int deleteUserMessages(int idUser) throws Exception;
 }

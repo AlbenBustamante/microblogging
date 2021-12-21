@@ -22,7 +22,8 @@ public class DAOMessageImpl implements DAOMessage {
         SQL_SELECT_BY_USERNAME = "SELECT message_id FROM messages m INNER JOIN users AS u " +
                 "ON m.user_id_pk = u.user_id WHERE UPPER(username) = UPPER(?);",
         SQL_SELECT_BY_MESSAGE = "SELECT message_id FROM messages WHERE message LIKE ?;",
-        SQL_SELECT_BY_DATE_TIME = "SELECT message_id FROM messages WHERE date_time = ?";
+        SQL_SELECT_BY_DATE_TIME = "SELECT message_id FROM messages WHERE date_time = ?",
+        SQL_DELETE_USER_MESSAGES = "DELETE FROM messages WHERE user_id_pk = ?;";
 
     public DAOMessageImpl() {
         this.userDao = new DAOUserImpl();
@@ -149,5 +150,15 @@ public class DAOMessageImpl implements DAOMessage {
 
         close(this.externConnection, conn, stmt, rs);
         return message;
+    }
+
+    @Override
+    public int deleteUserMessages(int idUser) throws Exception {
+        var conn = this.externConnection == null ? getConnection() : this.externConnection;
+        var stmt = conn.prepareStatement(SQL_DELETE_USER_MESSAGES);
+        stmt.setInt(1, idUser);
+        var rowsUpdated = stmt.executeUpdate();
+        close(this.externConnection, conn, stmt);
+        return rowsUpdated;
     }
 }
