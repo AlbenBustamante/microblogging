@@ -54,7 +54,7 @@ public class MessageService {
 
             if (filter == BlogConstants.LIST_MESSAGES) {
                 messages = this.messageDao.list();
-            } else if (filter == BlogConstants.LIST_USER_MESSAGES) {
+            } else if (filter == BlogConstants.LIST_USER_MESSAGES || filter == BlogConstants.LIST_MY_MESSAGES) {
                 messages = this.messageDao.findByUsername(message.getUser().getUsername());
             } else if (filter == BlogConstants.LIST_BY_MESSAGE) {
                 messages = this.messageDao.findByMessage(message.getMessage());
