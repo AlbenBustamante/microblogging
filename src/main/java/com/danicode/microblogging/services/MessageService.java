@@ -127,4 +127,28 @@ public class MessageService {
         }
         return message;
     }
+
+    public boolean deleteMessage(int idMessage) {
+        var deleted = false;
+        try {
+            this.conn = getConnection();
+            this.conn.setAutoCommit(false);
+            this.messageDao = new DAOMessageImpl(this.conn);
+
+            deleted = this.messageDao.delete(idMessage) != 0;
+
+            this.conn.commit();
+            this.conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.out);
+            try {
+                if (this.conn != null) {
+                    this.conn.rollback();
+                }
+            } catch (Exception ex1) {
+                ex1.printStackTrace(System.out);
+            }
+        }
+        return deleted;
+    }
 }
