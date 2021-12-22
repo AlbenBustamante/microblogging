@@ -11,4 +11,6 @@ public interface BlogConstants {
     String SEARCH_BY_MESSAGE = "Por mensaje";
     String SEARCH_MESSAGE_BY_USER = "Por usuario";
     String SEARCH_BY_USER_LOGGED = "Mis mensajes";
+    String ORDER_BY_NEW_MESSAGES = "Más recientes a más viejos";
+    String ORDER_BY_OLD_MESSAGES = "Más viejos a más recientes";
 }
