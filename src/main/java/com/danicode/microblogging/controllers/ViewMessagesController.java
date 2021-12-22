@@ -134,7 +134,8 @@ public class ViewMessagesController {
             message.setMessage(text);
         }
 
-        this.messages = service.getMessages(filter, message);
+        var order = String.valueOf(this.messagesTemplate.getCbOrderType().getSelectedItem());
+        this.messages = service.sortedMessages(order, filter, message);
 
         if (!this.messages.isEmpty()) {
             this.refreshPage();
