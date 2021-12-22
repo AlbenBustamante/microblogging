@@ -26,15 +26,22 @@ public class MainMenuController {
 
     private void deletePosts() {
         var service = new MessageService();
-        var messages = service.getMessages(BlogConstants.LIST_MY_MESSAGES, null);
-        var consult = "Tienes " + messages.size() + " mensajes.\n¿Deseas borrarlos todos?\nNo podrás recuperarlos.";
-        var option = JOptionPane.showConfirmDialog(null, consult, "Consulta",
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        var size = service.getMessages(BlogConstants.LIST_MY_MESSAGES, null).size();
+        if (size < 1) {
+            JOptionPane.showMessageDialog(null,
+                    "No tienes mensajes publicados, prueba a publicar uno en la sección Posting -> Publicar");
+        }
+        else {
+            var message = size > 1 ? " mensajes" : " mensaje";
+            var consult = "Tienes " + size + message + ".\n¿Deseas borrarlos todos?\nNo podrás recuperarlos.";
+            var option = JOptionPane.showConfirmDialog(null, consult, "Consulta",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-        if (option == JOptionPane.YES_OPTION) {
-            var deleted = service.deleteUserMessages();
-            var confirm = deleted ? "¡Todos sus mensajes han sido eliminados correctamente!" : "Ha habido un error";
-            JOptionPane.showMessageDialog(null, confirm);
+            if (option == JOptionPane.YES_OPTION) {
+                var deleted = service.deleteUserMessages();
+                var confirm = deleted ? "¡Todos sus mensajes han sido eliminados correctamente!" : "Ha habido un error";
+                JOptionPane.showMessageDialog(null, confirm);
+            }
         }
     }
 
