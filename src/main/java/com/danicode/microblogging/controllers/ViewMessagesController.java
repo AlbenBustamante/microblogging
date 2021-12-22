@@ -26,7 +26,7 @@ public class ViewMessagesController {
         this.messagesTemplate = new GUIViewMessages(owner);
         this.service = new MessageService();
         this.userLogged = new UserService().getUserLogged();
-        this.messages = this.service.getMessages(BlogConstants.LIST_MESSAGES, null);
+        this.messages = this.service.sortedMessages(BlogConstants.ORDER_BY_NEW_MESSAGES, BlogConstants.LIST_MESSAGES, null);
         this.init();
     }
 
@@ -56,15 +56,16 @@ public class ViewMessagesController {
     }
 
     private void loadMainData() {
-        var size = this.messages.size();
-        var cycles = Math.min(size, 10);
-
-        for (int i = 0; i < cycles; i ++) {
+        for (int i = 0; i < 10; i ++) {
             this.postTemplate[i] = new ViewPostTemplate();
             this.postTemplate[i].addMouseListener(this.popupAction(i));
             this.setActions(i);
             this.messagesTemplate.getCenterPane().add(this.postTemplate[i]);
-            this.setData(i, this.messages.get(i));
+            try {
+                this.setData(i, this.messages.get(i));
+            } catch (IndexOutOfBoundsException ex) {
+                this.postTemplate[i].setVisible(false);
+            }
         }
     }
 
