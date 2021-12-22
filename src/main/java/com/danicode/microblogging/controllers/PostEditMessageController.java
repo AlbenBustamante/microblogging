@@ -11,23 +11,40 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
+/**
+ * Posee dos constructores, según el que uses, el usuario podrá publicar un nuevo mensaje o editar un mensaje existente.
+ */
 public class PostEditMessageController implements DocumentListener {
     private final MessageService messageService;
     private final UserService userService;
     private GUIPostMessage postMessage;
     private Message messageToUpdate;
 
+    /**
+     * Inicializa los servicios necesarios.
+     * @see UserService
+     * @see MessageService
+     */
     private PostEditMessageController() {
         this.messageService = new MessageService();
         this.userService = new UserService();
     }
 
+    /**
+     * Con este constructor, el usuario podrá publicar un nuevo mensaje
+     * @param owner Ventana padre
+     */
     public PostEditMessageController(Window owner) {
         this();
         this.postMessage = new GUIPostMessage(owner);
         this.init();
     }
 
+    /**
+     * Con este constructor, debes especificar cuál mensaje quiere editar el usuario
+     * @param owner Ventana padre
+     * @param messageToUpdate Mensaje a actualizar
+     */
     public PostEditMessageController(Window owner, Message messageToUpdate) {
         this();
         this.messageToUpdate = messageToUpdate;
@@ -35,6 +52,11 @@ public class PostEditMessageController implements DocumentListener {
         this.init();
     }
 
+    /**
+     * Confirma los datos y verifica si estás en modo edición o publicación.
+     * @param message Mensaje de confirmación.
+     * @see #checkAction(boolean, String)
+     */
     private void confirm(String message) {
         this.postMessage.getJPost().setText("");
 
@@ -53,6 +75,11 @@ public class PostEditMessageController implements DocumentListener {
         }
     }
 
+    /**
+     * Inserta o actualiza un mensaje, muestra un mensaje de acuerdo a si ocurre o no algún error.
+     * @param action Preferible usar algún método que ejecute una acción y devuelva un boolean según si hubo o no algún error.
+     * @param message Mensaje de confirmación.
+     */
     private void checkAction(boolean action, String message) {
         if (action) {
             this.confirm(message);
@@ -62,6 +89,9 @@ public class PostEditMessageController implements DocumentListener {
         }
     }
 
+    /**
+     * Publica o edita un mesanje seǵun el constructor utilizado.
+     */
     private void postMessage() {
         var messageText = this.postMessage.getJPost().getText().strip();
 
@@ -78,6 +108,9 @@ public class PostEditMessageController implements DocumentListener {
         }
     }
 
+    /**
+     * Establece las acciones de los botones y del área de texto.
+     */
     private void setActions() {
         var document = this.postMessage.getJPost().getDocument();
         document.addDocumentListener(this);
@@ -86,10 +119,16 @@ public class PostEditMessageController implements DocumentListener {
         this.postMessage.getBPost().addActionListener(e -> this.postMessage());
     }
 
+    /**
+     * Inicializa los métodos necesarios.
+     */
     private void init() {
         this.setActions();
     }
 
+    /**
+     * Calcula los caracteres restantes y/o sobrantes y los muestra en un jlabel.
+     */
     private void checkCharacters() {
         var length = this.postMessage.getJPost().getText().strip().length();
         var remaining = 0;
