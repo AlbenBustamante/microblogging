@@ -1,5 +1,12 @@
 package com.danicode.microblogging.constants;
 
+/**
+ * Todas las constantes utilizadas en el proyecto son agregadas acá.
+ * <p>
+ *     Contienen Strings que pueden ser mostrados para el usuario y/o validación, así como enteros que son sólo para
+ *     validaciones.
+ * </p>
+ * */
 public interface BlogConstants {
     int POST_LENGTH = 140;
     int LIST_MESSAGES = 0;
