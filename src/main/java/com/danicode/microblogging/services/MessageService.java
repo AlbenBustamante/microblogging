@@ -7,7 +7,10 @@ import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.danicode.microblogging.services.ConnectionService.*;
 
@@ -180,5 +183,15 @@ public class MessageService {
             }
         }
         return deleted;
+    }
+
+    public List<Message> sortedMessages(String order, int filter, Message message) {
+        var messages = this.getMessages(filter, message);
+
+        if (order.equals(BlogConstants.ORDER_BY_NEW_MESSAGES)) {
+            Collections.reverse(messages);
+        }
+
+        return messages;
     }
 }
