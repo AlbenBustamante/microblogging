@@ -9,7 +9,7 @@ import java.awt.*;
 public class GUIViewMessages extends GUIDialog {
     private JPanel northPane, centerPane, southPane;
     private JTextField tfSearch;
-    private JComboBox<String> cbSearchType;
+    private JComboBox<String> cbSearchType, cbOrderType;
     private JButton bSearch, bExit, bPrevious, bNext;
     private JScrollPane scCenterPane;
 
@@ -42,6 +42,10 @@ public class GUIViewMessages extends GUIDialog {
                 BlogConstants.SEARCH_MESSAGES, BlogConstants.SEARCH_BY_MESSAGE, BlogConstants.SEARCH_MESSAGE_BY_USER,
                 BlogConstants.SEARCH_BY_USER_LOGGED
         });
+
+        this.cbOrderType = new JComboBox<>(new String[] {
+                BlogConstants.ORDER_BY_NEW_MESSAGES, BlogConstants.ORDER_BY_OLD_MESSAGES
+        });
     }
 
     private void createButtons() {
@@ -56,6 +60,7 @@ public class GUIViewMessages extends GUIDialog {
         this.northPane.add(this.cbSearchType);
         this.northPane.add(this.bSearch);
 
+        this.southPane.add(this.cbOrderType);
         this.southPane.add(this.bPrevious);
         this.southPane.add(this.bNext);
         this.southPane.add(this.bExit);
@@ -82,6 +87,8 @@ public class GUIViewMessages extends GUIDialog {
     public JTextField getTfSearch() { return this.tfSearch; }
 
     public JComboBox<String> getCbSearchType() { return this.cbSearchType; }
+
+    public JComboBox<String> getCbOrderType() { return this.cbOrderType; }
 
     public JButton getBSearch() { return this.bSearch; }
 
