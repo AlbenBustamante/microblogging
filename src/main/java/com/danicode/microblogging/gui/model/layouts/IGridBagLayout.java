@@ -3,25 +3,32 @@ package com.danicode.microblogging.gui.model.layouts;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Con esta interface, es mucho más fácil el uso de GridBagLayout.
+ * <p>Para usarla, es necesario sobreescribir el método {@code pane()} para así,
+ * indicar cuál es panel que va a utilizar el layout.</p>
+ * <p>Al tener sólo un método abstracto, puedes usar el paradigma funcional.</p>
+ */
 @FunctionalInterface
 public interface IGridBagLayout {
-    /*
-    La finalidad de ésta interface, es facilitar la adición de componentes gráficos
-        en aquellas ventanas que usen el GridBagLayout como su layout.
-
-    Para usarla, es necesario sobreescribir el método pane() para así retornar
-        un nuevo JPanel y trabajar sobre éste.
-        Todos los componentes gráficos serán añadidos al retorno de pane().
-
-    Se puede aplicar programación funcional gracias a que es el único método
-        para sobreescribir, de resto son métodos default, por lo que se pueden
-        llamar directamente sin necesidad de sobreescribirlos.
-    */
-
+    /**
+     * Espacio horizontal por defecto.
+     */
     String HSPACE = "       ";
+    /**
+     * Espacio vertical o salto de línea por defecto.
+     */
     String VSPACE = "<html><body> <br/> </body></html>";
+    /**
+     * Restricción utilizada por defecto, no es necesario crear más puesto que sólo
+     * es un auxiliar para indicar las restricciones del elemento a añadir en el {@code pane()}.
+     */
     GridBagConstraints GBC = new GridBagConstraints();
 
+    /**
+     * Es necesario sobreescribirlo para que los métodos puedan funcionar.
+     * @return Es necesario que devuelva con panel que tenga GridBagLayout como layout.
+     */
     JPanel pane();
 
     /**
