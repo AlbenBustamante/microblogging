@@ -8,22 +8,36 @@ import com.danicode.microblogging.services.UserService;
 
 import javax.swing.*;
 
+/**
+ * Se encarga de mostrar el menú principal y todas las opciones.
+ */
 public class MainMenuController {
     private final GUIMainMenu template;
     private final UserService userService;
 
+    /**
+     * Inicializa el menú principal.
+     * @see com.danicode.microblogging.gui.mainmenu.GUIMainMenu
+     * @see com.danicode.microblogging.services.UserService
+     */
     public MainMenuController() {
         this.template = new GUIMainMenu();
         this.userService = new UserService();
         this.setActions();
     }
 
+    /**
+     * Se ejecuta cuando el usuario desea cerrar su seión.
+     */
     private void logOut() {
         this.userService.resetUserLogged();
         new LogInController();
         this.template.dispose();
     }
 
+    /**
+     * Hace varias validaciones y borra los mensajes del usuario logueado si no hay ningún error.
+     */
     private void deletePosts() {
         var service = new MessageService();
         var size = service.getMessages(BlogConstants.LIST_MY_MESSAGES, null).size();
@@ -45,6 +59,9 @@ public class MainMenuController {
         }
     }
 
+    /**
+     * Establece las acciones de cada menuItem.
+     */
     private void setActions() {
         this.template.getAboutUs().addActionListener(e -> new GUIAboutUs(this.template));
         this.template.getProfileVisualize().addActionListener(e -> new ViewProfileController(this.template, this.userService.getUserLogged()));

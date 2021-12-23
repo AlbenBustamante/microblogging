@@ -7,10 +7,8 @@ import com.danicode.microblogging.model.domain.Message;
 import com.danicode.microblogging.model.domain.User;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.danicode.microblogging.services.ConnectionService.*;
 
@@ -23,6 +21,11 @@ public class MessageService {
         this.userService = new UserService();
     }
 
+    /**
+     * Crea e inserta un nuevo mensaje a la base de datos.
+     * @param message Mensaje a registrar.
+     * @return Devuelve true si la operación fue exitosa.
+     */
     public boolean createMessage(Message message) {
         var isCreated = false;
         try {
@@ -48,11 +51,14 @@ public class MessageService {
     }
 
     /**
-     * Mediante este método, puedes obtener una lista de mensajes según lo que requieras.
-     * @param filter Usa las constantes de {@code BlogConstants} para obtener el listado deseado.
-     * @param message Si el filtro es distinto de {@code LIST_MESSAGES}, puede ser {@code null}.
-     *                En cambio, si es por usuario, con sólo indicar el mensaje es suficiente.
-     * */
+     * Obtiene una lista de mensajes según el filtro indicado.
+     * <p>Preferiblemente, usa las constantes de {@code BLogConstants} para filtrar los mensajes.</p>
+     * @param filter Filtro de mensajes.
+     * @param message Inicializa el username del mensaje si el filtro es {@code LIST_USER_MESSAGES}.
+     *                <p>En cambio, usa el username del {@code userLogged} si el filtro es {@code LIST_MY_MESSAGES}.</p>
+     *                <p>Inicializa el mensaje si usas {@code LIST_BY_MESSAGE}.</p>
+     *                <p>Si sólo deseas obtener TODOS los mensajes, {@code message} puede ser {@code null}.</p>
+     */
     public List<Message> getMessages(int filter, Message message) {
         List<Message> messages = null;
         try {
@@ -85,10 +91,20 @@ public class MessageService {
         return messages;
     }
 
+    /**
+     * Envía una consulta a la base de datos para obtener al usuario que coincida con el nombre de usuario.
+     * @param username Nombre de usuario a buscar.
+     * @return Devuelve al usuario encontrado, si no encuentra, devuelve {@code null}.
+     */
     public User getAuthor(String username) {
         return this.userService.getUser(username);
     }
 
+    /**
+     * Edita un mensaje y guarda los cambios en la base de datos.
+     * @param message Mensaje a actualizar. Importante tener el id inicializado.
+     * @return Devuelve true si la operación fue exitosa.
+     */
     public boolean editMessage(Message message) {
         var edited = false;
         try {
@@ -113,6 +129,11 @@ public class MessageService {
         return edited;
     }
 
+    /**
+     * Obtiene un mensaje según la hora y fecha de registro.
+     * @param dateTime Fecha y hora a consultar.
+     * @return Devuelve el mensaje si fue encontrado, de lo contrario devuelve {@code null}.
+     */
     public Message getMessage(String dateTime) {
         Message message = null;
         try {
@@ -137,6 +158,11 @@ public class MessageService {
         return message;
     }
 
+    /**
+     * Borra un mensaje de la base de datos.
+     * @param idMessage id del mensaje a borrar.
+     * @return Devuelve true si la operación fue exitosa.
+     */
     public boolean deleteMessage(int idMessage) {
         var deleted = false;
         try {
@@ -161,6 +187,10 @@ public class MessageService {
         return deleted;
     }
 
+    /**
+     * Borra todos los mensajes del usuario logueado.
+     * @return Devuelve true si la operación fue exitosa.
+     */
     public boolean deleteUserMessages() {
         var deleted = false;
         try {
@@ -185,6 +215,16 @@ public class MessageService {
         return deleted;
     }
 
+    /**
+     * Ordena los mensajes según el orden.
+     * <p>Nuevamente, preferiblemente usar las constantes de {@code BlogConstants} para filtrado y ordenamiento.</p>
+     * @param order Puede ser {@code ORDER_BY_NEW_MESSAGES} o {@code ORDER_BY_OLD_MESSAGES}.
+     * @param filter Ver la documentación de {@code getMessages} para obtener la información.
+     * @param message Ver la documentación de {@code getMessages} para obtener la información.
+     * @return Devuelve una lista de mensajes según el filtrado y ordenamiento.
+     * <p>Devuelve una lista vacía si no encuentra elementos.</p>
+     * @see #getMessages(int, Message)
+     */
     public List<Message> sortedMessages(String order, int filter, Message message) {
         var messages = this.getMessages(filter, message);
 
