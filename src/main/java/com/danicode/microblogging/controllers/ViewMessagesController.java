@@ -13,6 +13,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+/**
+ * Esta clase se encarga de toda la lógica para mostrar los mensajes.
+ */
 public class ViewMessagesController {
     private int currentPage = 1, totalPages;
     private List<Message> messages;
@@ -20,34 +23,58 @@ public class ViewMessagesController {
     private final GUIViewMessages messagesTemplate;
     private final MessageService service;
     private final User userLogged;
-    private final ViewPostTemplate[] postTemplate = new ViewPostTemplate[10];
+    private final ViewPostTemplate[] postTemplate;
+    private static final int MAX_MESSAGES = 10;
 
+    /**
+     * Muestra la interfaz gráfica de mensajes e interactúa con los usuarios y la base de datos.
+     * @param owner Ventana padre
+     * @see GUIViewMessages
+     * @see MessageService
+     * @see UserService
+     * @see ViewPostTemplate
+     */
     public ViewMessagesController(JFrame owner) {
         this.messagesTemplate = new GUIViewMessages(owner);
         this.service = new MessageService();
         this.userLogged = new UserService().getUserLogged();
         this.messages = this.service.sortedMessages(BlogConstants.ORDER_BY_NEW_MESSAGES, BlogConstants.LIST_MESSAGES, null);
+        this.postTemplate = new ViewPostTemplate[MAX_MESSAGES];
         this.init();
     }
 
+    /**
+     * Establece el número total de páginas según la cantidad de mensajes almacenados.
+     */
     private void setTotalPages() {
         this.totalPages = 0;
         for (int i = 0; i < this.messages.size(); i ++) {
-            if (i % 10 == 0) {
+            if (i % MAX_MESSAGES == 0) {
                 this.totalPages ++;
             }
         }
     }
 
+    /**
+     * Indica mediante un label la página actual y la cantidad total de páginas.
+     */
     private void resetLabel() {
         this.lPageIndex.setText("Página " + this.currentPage + " de " + this.totalPages);
     }
 
+    /**
+     * Crea y muestra el indicador de páginas
+     */
     private void createLabel() {
         this.lPageIndex = new JLabel("Página " + this.currentPage + " de " + this.totalPages);
         this.messagesTemplate.getCenterPane().add(this.lPageIndex);
     }
 
+    /**
+     * Muestra los datos de un mensaje en un postTemplate
+     * @param index Índice del postTemplate.
+     * @param message Mensaje de donde se obtendrán los datos.
+     */
     private void setData(int index, Message message) {
         this.postTemplate[index].getLFullName().setText(message.getUser().getName() + " " + message.getUser().getLastName());
         this.postTemplate[index].getLUsername().setText("@" + message.getUser().getUsername());
@@ -55,8 +82,11 @@ public class ViewMessagesController {
         this.postTemplate[index].getTaMessage().setText(message.getMessage());
     }
 
+    /**
+     * Carga los primeros 10 mensajes según el filtro indicado en el constructor y los muestra.
+     */
     private void loadMainData() {
-        for (int i = 0; i < 10; i ++) {
+        for (int i = 0; i < MAX_MESSAGES; i ++) {
             this.postTemplate[i] = new ViewPostTemplate();
             this.postTemplate[i].addMouseListener(this.popupAction(i));
             this.setActions(i);
@@ -69,19 +99,26 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Resetea la página actual a 1, en caso de que al cargar una lista de mensajes, la página actual sea superior al
+     * número total de páginas.
+     */
     private void checkCurrentPage() {
         if (this.currentPage > this.totalPages) {
             this.currentPage = 1;
         }
     }
 
+    /**
+     * Actualiza todos los datos y los postTemplate.
+     */
     private void refreshPage() {
         this.setTotalPages();
         this.checkCurrentPage();
 
-        var elements = (this.currentPage - 1) * 10;
+        var elements = (this.currentPage - 1) * MAX_MESSAGES;
 
-        for (int i = elements, j = 0; j < 10; i ++, j ++) {
+        for (int i = elements, j = 0; j < MAX_MESSAGES; i ++, j ++) {
             try {
                 this.setData(j, this.messages.get(i));
                 this.postTemplate[j].setVisible(true);
@@ -93,6 +130,9 @@ public class ViewMessagesController {
         this.resetLabel();
     }
 
+    /**
+     * Incrementa la página actual y actualiza los datos.
+     */
     private void nextPage() {
         if (this.currentPage < this.totalPages) {
             this.currentPage ++;
@@ -100,6 +140,9 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Decrementa la página actual y actualiza los datos.
+     */
     private void previousPage() {
         if (this.currentPage > 1) {
             this.currentPage --;
@@ -107,6 +150,10 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Según la opción seleccionada por el usuario en {@code cbSearchType}, establece el filtro a utilizar
+     * para actualizar los datos.
+     */
     private void checkSearchResult() {
         var optionSelected = String.valueOf(this.messagesTemplate.getCbSearchType().getSelectedItem());
         if (optionSelected.equals(BlogConstants.SEARCH_BY_MESSAGE)) {
@@ -123,6 +170,10 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Según el filtro seleccionado por el usuario, actualiza la lista de mensajes y los muestra en los postTemplate.
+     * @param filter Preferible usar BlogConstants para los filtros, tienen como sufijo {@code LIST}.
+     */
     private void search(int filter) {
         var text = this.messagesTemplate.getTfSearch().getText().strip();
         var message = new Message();
@@ -146,6 +197,12 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Es una acción para que al hacer click en (preferiblemente un postTemplate), muestre las opciones
+     * que puede usar el usuario en un mensaje, sobretodo si pertenece al usuario logueado.
+     * @param index Índice del postTemplate.
+     * @return Devuelve la acción
+     */
     private MouseAdapter popupAction(int index) {
         return new MouseAdapter() {
             @Override
@@ -155,17 +212,30 @@ public class ViewMessagesController {
         };
     }
 
+    /**
+     * Permite ver el perfil de cualquier usuario.
+     * @param index Índice del postTemplate.
+     */
     private void viewProfile(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@");
         var profile = this.service.getAuthor(username[1]);
         new ViewProfileController(this.messagesTemplate, profile);
     }
 
+    /**
+     * Verifica que el nombre de usuario del postTemplate, coincida con el mismo del usuario logueado.
+     * @param index Índice del postTemplate.
+     * @return Devuelve true si los datos coinciden.
+     */
     private boolean isUserLoggedMessage(int index) {
         var username = this.postTemplate[index].getLUsername().getText().split("@")[1];
         return this.userLogged.getUsername().equals(username);
     }
 
+    /**
+     * Permite editar un mensaje si {@code isUserLoggedMessage} devuelve true.
+     * @param index Índice del postTemplate.
+     */
     private void editMessage(int index) {
         if (this.isUserLoggedMessage(index)) {
             var dateTime = this.postTemplate[index].getLDateTime().getText();
@@ -178,6 +248,10 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Permite borrar un mensaje del usuario logueado, es decir, si {@code isUserLoggedMessage} devuelve true.
+     * @param index Índice del postTemplate.
+     */
     private void deleteMessage(int index) {
         if (this.isUserLoggedMessage(index)) {
             var dateTime = this.postTemplate[index].getLDateTime().getText();
@@ -198,12 +272,19 @@ public class ViewMessagesController {
         }
     }
 
+    /**
+     * Establece las acciones del PopupMenu de algún postTemplate.
+     * @param index Índice del postTemplate.
+     */
     private void setActions(int index) {
         this.postTemplate[index].getMenuViewProfile().addActionListener(e -> this.viewProfile(index));
         this.postTemplate[index].getMenuEditMessage().addActionListener(e -> this.editMessage(index));
         this.postTemplate[index].getMenuDeleteMessages().addActionListener(e -> this.deleteMessage(index));
     }
 
+    /**
+     * Estblaece las acciones de cada botón y el campo de texto para buscar.
+     */
     private void setActions() {
         this.messagesTemplate.getBExit().addActionListener(e -> this.messagesTemplate.dispose());
         this.messagesTemplate.getBNext().addActionListener(e -> this.nextPage());
@@ -212,6 +293,9 @@ public class ViewMessagesController {
         this.messagesTemplate.getTfSearch().addActionListener(e -> this.checkSearchResult());
     }
 
+    /**
+     * Inicializa los métodos necesarios para iniciar el controlador.
+     */
     private void init() {
         this.setTotalPages();
         this.setActions();
