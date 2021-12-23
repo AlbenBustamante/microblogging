@@ -12,6 +12,9 @@ import java.util.List;
 
 import static com.danicode.microblogging.services.ConnectionService.*;
 
+/**
+ * Se encarga de gestionar los mensajes y la base de datos.
+ */
 public class MessageService {
     private Connection conn;
     private DAOMessage messageDao;
