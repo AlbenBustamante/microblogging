@@ -2,7 +2,6 @@ package com.danicode.microblogging.gui.messages;
 
 import com.danicode.microblogging.model.domain.Message;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class GUIEditMessage extends GUIPostMessage {
